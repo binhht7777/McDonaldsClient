@@ -1,17 +1,12 @@
 <resources>
     <string name="app_name">McDonalds</string>
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">Email: feedback@vn.mcd.com</string>
-    <string name="dia_chi">Điện thoại: (028) 38 203040</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="title_activity_home">MainActivity</string>
+    <string name="title_home">Trang Chủ</string>
+    <string name="title_dashboard">Đặt Hàng</string>
+    <string name="title_notifications">Đơn Hàng</string>
+    <string name="title_user">Tài Khoản</string>
+    <string name="currency">Đồng</string>
     <string name="action_settings">Settings</string>
-
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-
-
+    <string name="SPYeuThich">Sản Phẩm Yêu Thích</string>
+    <string name="AllMenu">Khám Phá Toàn Bộ Menu</string>
 </resources>

@@ -7,11 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="DoDam">#B22830</color>
 
+    <color name="background">#E53943</color>
     <color name="dodam">#DB0007</color>
     <color name="do45">#e60008</color>
-    <color name="do60">#ff333a</color>
+    <color name="doman">#C00000</color>
+    <color name="do60">#CB3749</color>
     <color name="do65">#ff4d52</color>
     <color name="do70">#ff666b</color>
     <color name="hong">#FBE0E1</color>
+    <color name="xam">#808080</color>
+    <color name="xamnhat">#f2f2f2</color>
+    <color name="xamdam">#666666</color>
+    <color name="WhiteSmoke">#F8F8F8</color>
 </resources>

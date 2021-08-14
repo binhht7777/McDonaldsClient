@@ -1,22 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/text_home"
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_home"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.smarteist.autoimageslider.SliderView
+            android:id="@+id/image_slide"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            app:sliderAnimationDuration="600"
+            app:sliderAutoCycleDirection="back_and_forth"
+            app:sliderAutoCycleEnabled="true"
+            app:sliderIndicatorAnimationDuration="600"
+            app:sliderIndicatorGravity="center_horizontal|bottom"
+            app:sliderIndicatorMargin="15dp"
+            app:sliderIndicatorOrientation="horizontal"
+            app:sliderIndicatorPadding="3dp"
+            app:sliderIndicatorRadius="2dp"
+            app:sliderScrollTimeInSec="8"
+            app:sliderStartAutoCycle="true">
+
+        </com.smarteist.autoimageslider.SliderView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_below="@+id/layout1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/SPYeuThich" />
+
+        <ss.com.bannerslider.Slider
+            android:id="@+id/favorite_slider"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="top|left"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:layout_weight="1"-->
+<!--                app:cardCornerRadius="5dp">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="180dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@color/WhiteSmoke"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    &lt;!&ndash; Media &ndash;&gt;-->
+<!--                    <ImageView-->
+<!--                        android:id="@+id/img_catogory"-->
+<!--                        android:layout_width="180dp"-->
+<!--                        android:layout_height="130dp"-->
+<!--                        android:contentDescription="content_description_media"-->
+<!--                        android:scaleType="centerCrop"-->
+<!--                        app:srcCompat="@drawable/logo_mcdonalds" />-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:padding="8dp">-->
+
+<!--                        &lt;!&ndash; Title, secondary and supporting text &ndash;&gt;-->
+<!--                        <TextView-->
+<!--                            android:id="@+id/txt_catogory_name"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Burger"-->
+<!--                            android:textAppearance="?attr/textAppearanceHeadline6"-->
+<!--                            android:textColor="@color/DoDam"-->
+<!--                            android:textSize="@dimen/font_size_14" />-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/txt_description"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:paddingRight="8dp"-->
+<!--                            android:text="Burger Phi lê Cá phô mai"-->
+<!--                            android:textAppearance="?attr/textAppearanceBody2"-->
+<!--                            android:textColor="@color/xamdam"-->
+<!--                            android:textSize="@dimen/font_size_12" />-->
+
+<!--                    </LinearLayout>-->
+
+<!--                    &lt;!&ndash;                        &lt;!&ndash; Buttons &ndash;&gt;&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        <LinearLayout&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            android:layout_margin="8dp"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            android:orientation="horizontal">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                            <com.google.android.material.button.MaterialButton&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                android:layout_marginEnd="8dp"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                android:text="Order"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                android:backgroundTint="@color/xamnhat"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                style="?attr/borderlessButtonStyle"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                android:textAllCaps="false"&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                android:layout_marginRight="8dp" />&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        </LinearLayout>&ndash;&gt;-->
+
+<!--                </LinearLayout>-->
+<!--            </androidx.cardview.widget.CardView>-->
+        </ss.com.bannerslider.Slider>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout2"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="5"
+            android:text="@string/AllMenu"
+            android:textColor="@color/DoDam" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="4"
+            android:layoutDirection="inherit"
+            android:text="Menu"
+            android:textColor="@color/xamnhat" />
+    </LinearLayout>
+
+
+</RelativeLayout>
