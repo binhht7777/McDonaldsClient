@@ -56,12 +56,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/DoDam"
             android:text="@string/SPYeuThich" />
 
         <ss.com.bannerslider.Slider
             android:id="@+id/favorite_slider"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="wrap_content">
 
 <!--            <androidx.cardview.widget.CardView-->
 <!--                android:layout_width="match_parent"-->
@@ -141,6 +143,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout2"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:weightSum="10">
@@ -148,6 +151,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_marginLeft="8dp"
             android:layout_weight="5"
             android:text="@string/AllMenu"
@@ -156,6 +160,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_gravity="bottom"
             android:layout_weight="4"
             android:layoutDirection="inherit"
             android:text="Menu"

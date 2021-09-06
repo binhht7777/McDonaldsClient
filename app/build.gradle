@@ -45,6 +45,7 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
     // add thu vien
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
@@ -58,7 +59,6 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'com.ss.bannerslider:bannerslider:2.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    // implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation "androidx.multidex:multidex:2.0.1"
     implementation "com.nex3z:notification-badge:1.0.2"
     annotationProcessor 'androidx.room:room-compiler:2.1.0-beta01'
@@ -66,4 +66,5 @@ dependencies {
     implementation 'com.github.florent37:expansionpanel:1.2.4'
     implementation 'com.github.smarteist:autoimageslider:1.3.9'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.0'
+    implementation 'com.github.florent37:expansionpanel:1.2.4'
 }

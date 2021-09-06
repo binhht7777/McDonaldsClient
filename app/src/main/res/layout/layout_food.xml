@@ -25,7 +25,7 @@
                 android:id="@+id/txt_food_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
+                android:fontFamily="@font/tahoma"
                 android:textColor="@color/xam"
                 android:textSize="@dimen/font_size_18"
                 android:text="Chicken Biryani"/>
@@ -33,7 +33,7 @@
                 android:id="@+id/txt_food_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
+                android:fontFamily="@font/tahoma"
                 android:textSize="@dimen/font_size_16"
                 android:textColor="@color/DoDam"
                 android:text="69.000 VNĐ"/>

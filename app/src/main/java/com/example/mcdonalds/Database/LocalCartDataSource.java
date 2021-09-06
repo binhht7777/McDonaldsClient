@@ -15,8 +15,13 @@ public class LocalCartDataSource implements CartDataSource {
     }
 
     @Override
-    public Flowable<List<CartItem>> getAllCart(String tableId, String categoryId) {
-        return cartDAO.getAllCart(tableId, categoryId);
+    public Flowable<List<CartItem>> getAllCart(String userPhone, String foodId) {
+        return cartDAO.getAllCart(userPhone, foodId);
+    }
+
+    @Override
+    public Flowable<List<CartItem>> getAllCart2(String userPhone) {
+        return cartDAO.getAllCart2(userPhone);
     }
 
     @Override
@@ -32,6 +37,11 @@ public class LocalCartDataSource implements CartDataSource {
     @Override
     public Single<Long> sumPrice(String userPhone, String foodId) {
         return cartDAO.sumPrice(userPhone, foodId);
+    }
+
+    @Override
+    public Single<Long> sumPrice2(String userPhone) {
+        return cartDAO.sumPrice2(userPhone);
     }
 
     @Override
@@ -55,7 +65,7 @@ public class LocalCartDataSource implements CartDataSource {
     }
 
     @Override
-    public Single<Integer> cleanCart(String userPhone, String foodId) {
-        return cartDAO.cleanCart(userPhone, foodId);
+    public Single<Integer> cleanCart(String userPhone) {
+        return cartDAO.cleanCart(userPhone);
     }
 }

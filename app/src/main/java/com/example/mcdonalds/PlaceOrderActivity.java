@@ -74,8 +74,8 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         txt_total_cash = (TextView) findViewById(R.id.txt_total_cash);
         txt_user_phone = (TextView) findViewById(R.id.text_user_phone);
         txt_user_address = (TextView) findViewById(R.id.txt_user_address);
-        txt_new_address = (TextView) findViewById(R.id.txt_new_address);
-        btn_add_new_address = (Button) findViewById(R.id.btn_new_address);
+//        txt_new_address = (TextView) findViewById(R.id.txt_new_address);
+//        btn_add_new_address = (Button) findViewById(R.id.btn_new_address);
         ckb_default_address = (CheckBox) findViewById(R.id.chk_default_address);
         rdi_ood = (RadioButton) findViewById(R.id.rdi_ood);
         rdi_online_payment = (RadioButton) findViewById(R.id.rdi_online_payment);
@@ -135,7 +135,6 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
                     }
                 }
                 if (rdi_ood.isChecked()) {
-
                 } else if (rdi_online_payment.isChecked()) {
 
                 }

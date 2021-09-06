@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mcdonalds.Adapter.CategoryAdapter;
@@ -47,6 +48,8 @@ public class CategoryActivity extends AppCompatActivity {
     IMcDonaldsAPI iMcDonaldsAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+    TextView tvHoten, tvPhone;
+
     @Override
     protected void onDestroy() {
         compositeDisposable.clear();
@@ -57,6 +60,9 @@ public class CategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+
+        tvHoten=(TextView)findViewById(R.id.tvHoten);
+        tvPhone=(TextView)findViewById(R.id.tvPhone);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
@@ -106,6 +112,8 @@ public class CategoryActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recycler_category.setLayoutManager(mLayoutManager);
+        tvHoten.setText(Common.currentUser.getName());
+        tvPhone.setText(Common.currentUser.getUserPhone());
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 //        recycler_category.setLayoutManager(layoutManager);
 //        recycler_category.addItemDecoration(new DividerItemDecoration(this, layoutManager.getOrientation()));

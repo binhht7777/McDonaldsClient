@@ -1,5 +1,6 @@
 package com.example.mcdonalds.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -54,7 +55,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Picasso.get().load(categoryList.get(position).getCategoryImg()).into(holder.img_catogory);
         holder.txt_catogory_name.setText(new StringBuilder(categoryList.get(position).getCategoryName()));
         holder.txt_description.setText(new StringBuilder(categoryList.get(position).getDescription()));

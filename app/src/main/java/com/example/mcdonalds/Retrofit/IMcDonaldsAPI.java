@@ -5,6 +5,8 @@ package com.example.mcdonalds.Retrofit;
 import com.example.mcdonalds.Model.BackgroundModel;
 import com.example.mcdonalds.Model.FavoriteModel;
 import com.example.mcdonalds.Model.FoodModel;
+import com.example.mcdonalds.Model.Store;
+import com.example.mcdonalds.Model.StoreModel;
 import com.example.mcdonalds.Model.UpdateUserModel;
 import com.example.mcdonalds.Model.UserModel;
 import com.example.mcdonalds.Model.CategorydModel;
@@ -49,6 +51,9 @@ public interface IMcDonaldsAPI {
     // Get Category
     @GET("favorite")
     Observable<FavoriteModel> getFavorite(@Query("key") String apiKey);
+
+    @GET("store")
+    Observable<StoreModel> getStore(@Query("key") String apiKey);
 
 //    // GET nha hang
 //    @GET("restaurant")

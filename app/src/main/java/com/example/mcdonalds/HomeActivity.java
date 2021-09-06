@@ -171,7 +171,7 @@ public class HomeActivity extends AppCompatActivity {
         if (event.isSuccess()) {
             displayFavorites(event.getFavoriteList());
         } else {
-            Toast.makeText(this, "[BACKGROUND LOAD]" + event.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "[FAVORITE LOAD]" + event.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

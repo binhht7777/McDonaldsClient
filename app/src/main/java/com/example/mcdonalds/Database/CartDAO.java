@@ -18,6 +18,9 @@ public interface CartDAO {
     @Query("Select * From Cart Where userPhone=:userPhone And foodId=:foodId")
     Flowable<List<CartItem>> getAllCart(String userPhone, String foodId);
 
+    @Query("Select * From Cart Where userPhone=:userPhone")
+    Flowable<List<CartItem>> getAllCart2(String userPhone);
+
     @Query("Select Count(*) From Cart Where userPhone=:userPhone")
     Single<Integer> countCart(String userPhone);
 
@@ -26,6 +29,9 @@ public interface CartDAO {
 
     @Query("Select SUM(foodPrice*foodQuantity) From Cart Where userPhone=:userPhone And foodId=:foodId")
     Single<Long> sumPrice(String userPhone, String foodId);
+
+    @Query("Select SUM(foodPrice*foodQuantity) From Cart Where userPhone=:userPhone")
+    Single<Long> sumPrice2(String userPhone);
 
     @Query("Select * From Cart Where foodId=:foodId And userPhone=:userPhone And categoryId=:categoryId")
     Single<CartItem> getItemInCart(String foodId, String userPhone, String categoryId);
@@ -39,6 +45,6 @@ public interface CartDAO {
     @Delete
     Single<Integer> deleteCart(CartItem cart);
 
-    @Query("Delete From Cart Where userPhone=:userPhone And foodId=:foodId")
-    Single<Integer> cleanCart(String userPhone, String foodId);
+    @Query("Delete From Cart Where userPhone=:userPhone")
+    Single<Integer> cleanCart(String userPhone);
 }

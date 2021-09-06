@@ -33,7 +33,7 @@
             android:id="@+id/txt_category_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
+            android:fontFamily="@font/tahoma"
             android:text="My Category"
             android:textColor="@color/do60"
             android:textSize="@dimen/font_size_30" />

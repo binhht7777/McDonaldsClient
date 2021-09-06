@@ -1,6 +1,5 @@
 package com.example.mcdonalds.Database;
 
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -39,21 +38,19 @@ public class CartItem {
 
     }
 
-    @NonNull
     public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(@NonNull String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 
-    @NonNull
     public String getUserPhone() {
         return userPhone;
     }
 
-    public void setUserPhone(@NonNull String userPhone) {
+    public void setUserPhone(String userPhone) {
         this.userPhone = userPhone;
     }
 
