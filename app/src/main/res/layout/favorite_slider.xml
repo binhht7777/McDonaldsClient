@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5dp"
+    android:layout_gravity="top|left"
+    android:layout_weight="1"
+    android:layout_margin="8dp">
+    <LinearLayout
+        android:layout_width="180dp"
+        android:background="@color/WhiteSmoke"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Media -->
+        <ImageView
+            android:id="@+id/img_catogory"
+            android:layout_width="180dp"
+            android:layout_height="150dp"
+            app:srcCompat="@drawable/logo_mcdonalds"
+            android:scaleType="centerCrop"
+            android:contentDescription="content_description_media" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Title, secondary and supporting text -->
+            <TextView
+                android:id="@+id/txt_catogory_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Burger"
+                android:textColor="@color/DoDam"
+                android:textSize="@dimen/font_size_14"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+            <TextView
+                android:id="@+id/txt_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingRight="8dp"
+                android:textSize="@dimen/font_size_12"
+                android:text="Burger Phi lê Cá phô mai"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="@color/xamdam" />
+
+        </LinearLayout>
+
+        <!--                        &lt;!&ndash; Buttons &ndash;&gt;-->
+        <!--                        <LinearLayout-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_margin="8dp"-->
+        <!--                            android:orientation="horizontal">-->
+        <!--                            <com.google.android.material.button.MaterialButton-->
+        <!--                                android:layout_width="wrap_content"-->
+        <!--                                android:layout_height="wrap_content"-->
+        <!--                                android:layout_marginEnd="8dp"-->
+        <!--                                android:text="Order"-->
+        <!--                                android:backgroundTint="@color/xamnhat"-->
+        <!--                                style="?attr/borderlessButtonStyle"-->
+        <!--                                android:textAllCaps="false"-->
+        <!--                                android:layout_marginRight="8dp" />-->
+        <!--                        </LinearLayout>-->
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
