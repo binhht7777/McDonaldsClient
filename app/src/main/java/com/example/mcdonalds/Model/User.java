@@ -1,20 +1,21 @@
 package com.example.mcdonalds.Model;
 
 public class User {
-    private String UserId, UserPhone, Name;
+    private String Imei, UserPhone, Name, IsCustomerYN;
 
-    public User(String userId, String userPhone, String name) {
-        UserId = userId;
+    public User(String imei, String userPhone, String name, String isCustomerYN) {
+        Imei = imei;
         UserPhone = userPhone;
         Name = name;
+        IsCustomerYN = isCustomerYN;
     }
 
-    public String getUserId() {
-        return UserId;
+    public String getImei() {
+        return Imei;
     }
 
-    public void setUserId(String userId) {
-        UserId = userId;
+    public void setImei(String imei) {
+        Imei = imei;
     }
 
     public String getUserPhone() {
@@ -31,5 +32,13 @@ public class User {
 
     public void setName(String name) {
         Name = name;
+    }
+
+    public String getIsCustomerYN() {
+        return IsCustomerYN;
+    }
+
+    public void setIsCustomerYN(String isCustomerYN) {
+        IsCustomerYN = isCustomerYN;
     }
 }

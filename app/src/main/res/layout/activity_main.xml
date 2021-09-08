@@ -112,16 +112,6 @@
             android:textSize="@dimen/font_size_16"
             android:text="Đăng ký mới"
             android:textColor="@color/xamdam" />
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/chkOrderTruoc"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:fontFamily="@font/tahoma"
-            android:textSize="@dimen/font_size_16"
-            android:text="Đặt hàng trước"
-            android:textColor="@color/xamdam" />
     </LinearLayout>
 
     <LinearLayout

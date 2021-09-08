@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -126,10 +127,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         sliderView=findViewById(R.id.image_slide);
+
         init();
         initView();
         LoadBackgroud();
         LoadFavorite();
+
+
+
     }
 
     private void LoadBackgroud() {

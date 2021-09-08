@@ -1,7 +1,6 @@
 package com.example.mcdonalds.Retrofit;
 
 
-
 import com.example.mcdonalds.Model.BackgroundModel;
 import com.example.mcdonalds.Model.FavoriteModel;
 import com.example.mcdonalds.Model.FoodModel;
@@ -21,10 +20,14 @@ import retrofit2.http.Query;
 public interface IMcDonaldsAPI {
 
 
+    @GET("userbyimei")
+    Observable<UserModel> getImei(@Query("key") String apiKey,
+                                  @Query("imei") String imei);
+
     //lay thong tin background
-    @GET("users")
-    Observable<UserModel> getUsers(@Query("key") String apiKey,
-                                   @Query("userPhone") String userPhone);
+    @GET("userbyphone")
+    Observable<UserModel> getUserByPhone(@Query("key") String apiKey,
+                                         @Query("userPhone") String userPhone);
 
     //lay thong tin background
     @GET("background")
@@ -35,7 +38,7 @@ public interface IMcDonaldsAPI {
     Observable<CategorydModel> getCategory(@Query("key") String apiKey);
 
     // Get food by category
-    @GET("foodByCategory")
+    @GET("foodbycategory")
     Observable<FoodModel> getFoodByCategory(@Query("key") String apiKey,
                                             @Query("categoryId") String categoryId);
 
@@ -43,7 +46,7 @@ public interface IMcDonaldsAPI {
     @POST("users")
     @FormUrlEncoded
     Observable<UpdateUserModel> updateUses(@Field("key") String apiKey,
-                                           @Field("userId") String userId,
+                                           @Field("imei") String imei,
                                            @Field("userPhone") String userPhone,
                                            @Field("name") String name);
 

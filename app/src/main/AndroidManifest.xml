@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.McDonalds">
-        <activity android:name=".CartListActivity"></activity>
         <activity android:name=".PlaceOrderActivity" />
         <activity android:name=".DonHangActivity" />
         <activity android:name=".UserActivity" />
