@@ -47,7 +47,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     CompositeDisposable completDisposable;
     IMcDonaldsAPI mcDonaldsAPI;
     CartDataSource cartDataSource;
-    String orderId;
+    String orderDetailId;
     public void onStop() {
         completDisposable.clear();
 
@@ -74,7 +74,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                 } else {
                     List<Food> list = new ArrayList<>();
                     for (Food food : foodListOld) {
-                        if (food.getFoodName().toLowerCase().contains(strSearch.toLowerCase())) {
+                        if (food.getFoodname().toLowerCase().contains(strSearch.toLowerCase())) {
                             list.add(food);
                         }
                     }
@@ -103,16 +103,16 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
-        Picasso.get().load(foodList.get(position).getFoodImg())
+        Picasso.get().load(foodList.get(position).getFoodimg())
                 .placeholder(null)
                 .into(holder.img_food);
-        holder.txt_food_name.setText(foodList.get(position).getFoodName());
+        holder.txt_food_name.setText(foodList.get(position).getFoodname());
         holder.txt_food_price.setText(String.valueOf(foodList.get(position).getPrice()) + " " + context.getString(R.string.currency));
 
-        orderId = UUID.randomUUID().toString();
+        orderDetailId = UUID.randomUUID().toString();
         holder.setListener((view, position1, isDetail) -> {
             Common.currentFood = foodList.get(position);
-            Common.globalFoodId = foodList.get(position).getFoodId();
+            Common.globalFoodId = foodList.get(position).getFoodid();
             if (isDetail) {
 //                context.startActivity(new Intent(context, FoodDetailActivity.class));
 //                EventBus.getDefault().postSticky(new FoodDetailEvent(true, foodList.get(position)));
@@ -120,12 +120,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
             } else {
                 // cart create
                 CartItem cartItem = new CartItem();
-                cartItem.setOrderId(orderId);
+                cartItem.setOrderDetailId(orderDetailId);
                 cartItem.setUserPhone(Common.currentUser.getUserPhone());
-                cartItem.setFoodId(foodList.get(position).getFoodId());
-                cartItem.setFoodName(foodList.get(position).getFoodName());
+                cartItem.setFoodId(foodList.get(position).getFoodid());
+                cartItem.setFoodName(foodList.get(position).getFoodname());
                 cartItem.setFoodPrice(foodList.get(position).getPrice());
-                cartItem.setFoodImage(foodList.get(position).getFoodImg());
+                cartItem.setFoodImage(foodList.get(position).getFoodimg());
                 cartItem.setFoodQuantity(1);
                 cartItem.setCategoryId(Common.currentCategory.getCategoryId());
                 completDisposable.add(

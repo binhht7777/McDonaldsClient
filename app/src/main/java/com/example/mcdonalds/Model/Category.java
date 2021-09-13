@@ -1,44 +1,44 @@
 package com.example.mcdonalds.Model;
 
 public class Category {
-    private String CategoryId, CategoryName, Description, CategoryImg;
+    private String categoryid, categoryname, description, categoryimg;
 
     public Category(String categoryId, String categoryName, String description, String categoryImg) {
-        CategoryId = categoryId;
-        CategoryName = categoryName;
-        Description = description;
-        CategoryImg = categoryImg;
+        categoryid = categoryId;
+        categoryname = categoryName;
+        description = description;
+        categoryimg = categoryImg;
     }
 
     public String getCategoryId() {
-        return CategoryId;
+        return categoryid;
     }
 
     public void setCategoryId(String categoryId) {
-        CategoryId = categoryId;
+        categoryid = categoryId;
     }
 
     public String getCategoryName() {
-        return CategoryName;
+        return categoryname;
     }
 
     public void setCategoryName(String categoryName) {
-        CategoryName = categoryName;
+        categoryname = categoryName;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        description = description;
     }
 
     public String getCategoryImg() {
-        return CategoryImg;
+        return categoryimg;
     }
 
     public void setCategoryImg(String categoryImg) {
-        CategoryImg = categoryImg;
+        categoryimg = categoryImg;
     }
 }

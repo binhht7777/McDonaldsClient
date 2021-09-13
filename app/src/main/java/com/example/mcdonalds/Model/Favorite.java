@@ -1,45 +1,45 @@
 package com.example.mcdonalds.Model;
 
 public class Favorite {
-    private String FoodId, FoodName, FoodImg;
-    private Integer Count;
+    private String foodid, foodname, foodimg;
+    private Integer count;
 
-    public Favorite(String foodId, String foodName, String foodImg, Integer count) {
-        FoodId = foodId;
-        FoodName = foodName;
-        FoodImg = foodImg;
-        Count = count;
+    public Favorite(String foodid, String foodname, String foodimg, Integer count) {
+        this.foodid = foodid;
+        this.foodname = foodname;
+        this.foodimg = foodimg;
+        this.count = count;
     }
 
-    public String getFoodId() {
-        return FoodId;
+    public String getFoodid() {
+        return foodid;
     }
 
-    public void setFoodId(String foodId) {
-        FoodId = foodId;
+    public void setFoodid(String foodid) {
+        this.foodid = foodid;
     }
 
-    public String getFoodName() {
-        return FoodName;
+    public String getFoodname() {
+        return foodname;
     }
 
-    public void setFoodName(String foodName) {
-        FoodName = foodName;
+    public void setFoodname(String foodname) {
+        this.foodname = foodname;
     }
 
-    public String getFoodImg() {
-        return FoodImg;
+    public String getFoodimg() {
+        return foodimg;
     }
 
-    public void setFoodImg(String foodImg) {
-        FoodImg = foodImg;
+    public void setFoodimg(String foodimg) {
+        this.foodimg = foodimg;
     }
 
     public Integer getCount() {
-        return Count;
+        return count;
     }
 
     public void setCount(Integer count) {
-        Count = count;
+        this.count = count;
     }
 }

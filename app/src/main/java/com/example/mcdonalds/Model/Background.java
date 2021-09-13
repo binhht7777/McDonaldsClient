@@ -1,26 +1,26 @@
 package com.example.mcdonalds.Model;
 
 public class Background {
-    private String BackgroundId, BackgroundImg;
+    private String backgroundid, backgroundimg;
 
-    public Background(String backgroundId, String backgroundImg) {
-        BackgroundId = backgroundId;
-        BackgroundImg = backgroundImg;
+    public Background(String backgroundid, String backgroundimg) {
+        this.backgroundid = backgroundid;
+        this.backgroundimg = backgroundimg;
     }
 
-    public String getBackgroundId() {
-        return BackgroundId;
+    public String getBackgroundid() {
+        return backgroundid;
     }
 
-    public void setBackgroundId(String backgroundId) {
-        BackgroundId = backgroundId;
+    public void setBackgroundid(String backgroundid) {
+        this.backgroundid = backgroundid;
     }
 
-    public String getBackgroundImg() {
-        return BackgroundImg;
+    public String getBackgroundimg() {
+        return backgroundimg;
     }
 
-    public void setBackgroundImg(String backgroundImg) {
-        BackgroundImg = backgroundImg;
+    public void setBackgroundimg(String backgroundimg) {
+        this.backgroundimg = backgroundimg;
     }
 }

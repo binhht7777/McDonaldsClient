@@ -9,7 +9,8 @@
     <string name="action_settings">Settings</string>
     <string name="SPYeuThich">Sản Phẩm Yêu Thích</string>
     <string name="AllMenu">Khám Phá Toàn Bộ Menu</string>
-    <string name="place_order">Order</string>
+    <string name="thanhtoan">Thanh Toán</string>
+    <string name="place_order">Đặt Hàng</string>
     <string name="cart">Cart</string>
     <string name="empty_cart">Empty Cart</string>
 </resources>

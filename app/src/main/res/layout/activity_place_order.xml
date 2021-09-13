@@ -58,7 +58,8 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="8dp"
+                            android:textColor="@color/xamdam"
+                            android:layout_marginLeft="5dp"
                             android:layout_weight="8"
                             android:fontFamily="@font/tahoma"
                             android:text="200"
@@ -90,12 +91,25 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="8dp"
-                            android:layout_weight="8"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="3"
+                            android:textColor="@color/xamdam"
                             android:fontFamily="@font/tahoma"
                             android:text="0907777869"
                             android:textSize="@dimen/font_size_14" />
+                        <TextView
+                            android:id="@+id/text_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="7"
+                            android:fontFamily="@font/tahoma"
+                            android:textColor="@color/xamdam"
+                            android:text="Nguyễn Văn B"
+                            android:textSize="@dimen/font_size_14" />
                     </LinearLayout>
+
 
                     <View
                         android:layout_width="match_parent"
@@ -119,9 +133,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="8dp"
+                            android:layout_marginLeft="5dp"
                             android:layout_weight="2"
                             android:fontFamily="@font/tahoma"
+                            android:textColor="@color/xamdam"
                             android:text="Date"
                             android:textSize="@dimen/font_size_14" />
 
@@ -130,8 +145,10 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="30dp"
+                            android:layout_marginLeft="5dp"
                             android:layout_centerInParent="true"
                             android:layout_weight="7"
+                            android:textColor="@color/xamdam"
                             android:hint="Select date"
                             android:theme="@style/TextInputLayout">
 
@@ -190,17 +207,17 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="8dp"
-                            android:layout_weight="9"
+                            android:textColor="@color/xamdam"
+                            android:layout_weight="10"
                             android:fontFamily="@font/tahoma"
                             android:text="257 Nguyen Trai"
                             android:textSize="@dimen/font_size_14" />
 
-                        <CheckBox
-                            android:id="@+id/chk_default_address"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
+                        <!--                        <CheckBox-->
+                        <!--                            android:id="@+id/chk_default_address"-->
+                        <!--                            android:layout_width="0dp"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_weight="1" />-->
                     </LinearLayout>
 
                     <View
@@ -229,31 +246,31 @@
                                 android:inputType="none"
                                 android:fontFamily="@font/tahoma"
                                 android:textSize="@dimen/font_size_14"
-                                android:textColor="@color/DoDam"/>
+                                android:textColor="@color/xamdam"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 
-<!--                        <TextView-->
-<!--                            android:id="@+id/txt_new_address"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_gravity="center_vertical"-->
-<!--                            android:layout_marginLeft="8dp"-->
-<!--                            android:layout_weight="7"-->
-<!--                            android:fontFamily="@font/tahoma"-->
-<!--                            android:text="257 Nguyen Trai"-->
-<!--                            android:textSize="@dimen/font_size_14" />-->
+                        <!--                        <TextView-->
+                        <!--                            android:id="@+id/txt_new_address"-->
+                        <!--                            android:layout_width="0dp"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_gravity="center_vertical"-->
+                        <!--                            android:layout_marginLeft="5dp"-->
+                        <!--                            android:layout_weight="7"-->
+                        <!--                            android:fontFamily="@font/tahoma"-->
+                        <!--                            android:text="257 Nguyen Trai"-->
+                        <!--                            android:textSize="@dimen/font_size_14" />-->
 
-<!--                        <Button-->
-<!--                            android:id="@+id/btn_new_address"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="35dp"-->
-<!--                            android:layout_weight="3"-->
-<!--                            android:background="@color/DoDam"-->
-<!--                            android:text="Add Address"-->
-<!--                            android:textAllCaps="true"-->
-<!--                            android:textColor="@color/xamnhat"-->
-<!--                            android:textSize="@dimen/font_size_12" />-->
+                        <!--                        <Button-->
+                        <!--                            android:id="@+id/btn_new_address"-->
+                        <!--                            android:layout_width="0dp"-->
+                        <!--                            android:layout_height="35dp"-->
+                        <!--                            android:layout_weight="3"-->
+                        <!--                            android:background="@color/DoDam"-->
+                        <!--                            android:text="Add Address"-->
+                        <!--                            android:textAllCaps="true"-->
+                        <!--                            android:textColor="@color/xamnhat"-->
+                        <!--                            android:textSize="@dimen/font_size_12" />-->
                     </LinearLayout>
 
                     <View
@@ -293,6 +310,7 @@
                         android:checked="true"
                         android:fontFamily="@font/tahoma"
                         android:text="Thanh toán tiền mặt"
+                        android:textColor="@color/xamdam"
                         android:textSize="@dimen/font_size_14" />
 
                     <RadioButton
@@ -301,6 +319,7 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:fontFamily="@font/tahoma"
+                        android:textColor="@color/xamdam"
                         android:text="Thanh toán QR Code"
                         android:textSize="@dimen/font_size_14" />
                 </RadioGroup>
@@ -314,10 +333,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@color/DoDam"
             android:fontFamily="@font/tahoma"
-            android:text="Process"
+            android:text="Thanh toán"
             android:textAllCaps="true"
             android:textColor="@color/xamnhat" />
 

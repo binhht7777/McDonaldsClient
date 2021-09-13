@@ -29,7 +29,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.Holder> {
     @Override
     public void onBindViewHolder(Holder viewHolder, int position) {
 //viewHolder.imageView.setImageURI(backgroundList.get(position).getBackgroundImg());
-        Picasso.get().load(backgroundList.get(position).getBackgroundImg()).into(viewHolder.imageView);
+        Picasso.get().load(backgroundList.get(position).getBackgroundimg()).into(viewHolder.imageView);
     }
 
     @Override

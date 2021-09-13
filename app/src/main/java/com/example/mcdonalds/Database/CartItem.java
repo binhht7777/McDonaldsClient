@@ -9,8 +9,8 @@ import androidx.room.PrimaryKey;
 public class CartItem {
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "orderId")
-    private String orderId;
+    @ColumnInfo(name = "orderDetailId")
+    private String orderDetailId;
 
     @ColumnInfo(name = "userPhone")
     private String userPhone;
@@ -38,12 +38,13 @@ public class CartItem {
 
     }
 
-    public String getOrderId() {
-        return orderId;
+    @NonNull
+    public String getOrderDetailId() {
+        return orderDetailId;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrderDetailId(@NonNull String orderDetailId) {
+        this.orderDetailId = orderDetailId;
     }
 
     public String getUserPhone() {

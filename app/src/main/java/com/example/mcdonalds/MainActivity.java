@@ -14,7 +14,10 @@ import com.example.mcdonalds.Common.Common;
 import com.example.mcdonalds.Retrofit.IMcDonaldsAPI;
 import com.example.mcdonalds.Retrofit.RetrofitClient;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.UUID;
 
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnLogin, btnSignUp;
     MaterialCheckBox chkDangky;
     String IMEI = "";
+    TextInputLayout outlinedTextField, outlinedTextField2;
+
 
     @Override
     protected void onDestroy() {
@@ -46,9 +51,16 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
         edtPhone = (TextInputEditText) findViewById(R.id.edtPhone);
-        edtHoten = (TextInputEditText) findViewById(R.id.edtHoten);
-        chkDangky = (MaterialCheckBox) findViewById(R.id.chkdDangky);
+//        edtHoten = (TextInputEditText) findViewById(R.id.edtHoten);
+//        chkDangky = (MaterialCheckBox) findViewById(R.id.chkdDangky);
+        outlinedTextField = (TextInputLayout) findViewById(R.id.outlinedTextField);
+//        outlinedTextField2 = (TextInputLayout) findViewById(R.id.outlinedTextField2);
+        edtPhone.setVisibility(View.INVISIBLE);
+        btnLogin.setVisibility(View.INVISIBLE);
+        btnSignUp.setVisibility(View.INVISIBLE);
+        outlinedTextField.setVisibility(View.INVISIBLE);
         IMEI = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        Common.Imei = IMEI;
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -77,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
 //                                        Intent intent = new Intent(MainActivity.this, UpdateInfoActivity.class);
 //                                        startActivity(intent);
 //                                        finish();
+//                                        Snackbar.make(v, "Vui lòng đăng ký thông tin.!", Snackbar.LENGTH_LONG)
+//                                                .setAction("Thông báo", null).show();
+
                                         Toast.makeText(MainActivity.this, "Vui lòng đăng ký thông tin.!", Toast.LENGTH_SHORT).show();
 
                                     }
@@ -90,35 +105,38 @@ public class MainActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (chkDangky.isChecked()) {
-                    compositeDisposable.add(mcDonaldsAPI.updateUses(Common.API_KEY,
-                            IMEI,
-                            edtPhone.getText().toString(),
-                            edtHoten.getText().toString())
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(updateUserModel -> {
-                                        compositeDisposable.add(mcDonaldsAPI.getUserByPhone(Common.API_KEY, edtPhone.getText().toString())
-                                                .subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(userModel -> {
-                                                            if (userModel.isSuccess()) {
-                                                                Common.currentUser = userModel.getResult().get(0);
-                                                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                                                                startActivity(intent);
-                                                                finish();
-                                                            } else {
-                                                                Toast.makeText(MainActivity.this, "Vui lòng đăng ký thông tin.!", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        },
-                                                        throwable -> {
-                                                            Toast.makeText(MainActivity.this, "Đăng ký không thành công" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        }));
-                                    },
-                                    throwable -> {
-                                        Toast.makeText(MainActivity.this, "[UPDATE USER API]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }));
-                }
+                Intent intent = new Intent(MainActivity.this, CreateUserActivity.class);
+                startActivity(intent);
+                finish();
+//                if (chkDangky.isChecked()) {
+//                    compositeDisposable.add(mcDonaldsAPI.updateUses(Common.API_KEY,
+//                            IMEI,
+//                            edtPhone.getText().toString(),
+//                            edtHoten.getText().toString())
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe(updateUserModel -> {
+//                                        compositeDisposable.add(mcDonaldsAPI.getUserByPhone(Common.API_KEY, edtPhone.getText().toString())
+//                                                .subscribeOn(Schedulers.io())
+//                                                .observeOn(AndroidSchedulers.mainThread())
+//                                                .subscribe(userModel -> {
+//                                                            if (userModel.isSuccess()) {
+//                                                                Common.currentUser = userModel.getResult().get(0);
+//                                                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+//                                                                startActivity(intent);
+//                                                                finish();
+//                                                            } else {
+//                                                                Toast.makeText(MainActivity.this, "Vui lòng đăng ký thông tin.!", Toast.LENGTH_SHORT).show();
+//                                                            }
+//                                                        },
+//                                                        throwable -> {
+//                                                            Toast.makeText(MainActivity.this, "Đăng ký không thành công" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//                                                        }));
+//                                    },
+//                                    throwable -> {
+//                                        Toast.makeText(MainActivity.this, "[UPDATE USER API]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//                                    }));
+//                }
             }
         });
     }
@@ -131,11 +149,14 @@ public class MainActivity extends AppCompatActivity {
                             if (userModel.isSuccess()) {
                                 Common.currentUser = userModel.getResult().get(0);
                                 if (userModel.getResult().get(0).getIsCustomerYN().compareTo("N") == 0) {
-                                    edtPhone.setVisibility(View.VISIBLE);
-                                    edtHoten.setVisibility(View.VISIBLE);
-                                    chkDangky.setVisibility(View.VISIBLE);
-                                    btnLogin.setVisibility(View.VISIBLE);
-                                    btnSignUp.setVisibility(View.VISIBLE);
+                                    Common.isCustomerYN = userModel.getResult().get(0).getIsCustomerYN();
+                                    edtPhone.setVisibility(View.INVISIBLE);
+//                                    edtHoten.setVisibility(View.INVISIBLE);
+//                                    chkDangky.setVisibility(View.INVISIBLE);
+                                    btnLogin.setVisibility(View.INVISIBLE);
+                                    btnSignUp.setVisibility(View.INVISIBLE);
+                                    outlinedTextField.setVisibility(View.INVISIBLE);
+//                                    outlinedTextField2.setVisibility(View.INVISIBLE);
 //                                    Toast.makeText(MainActivity.this, "May cua hang!", Toast.LENGTH_SHORT).show();
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
@@ -145,10 +166,27 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }, 3000);
                                 } else {
-                                    Toast.makeText(MainActivity.this, "May khach.!", Toast.LENGTH_SHORT).show();
+                                    Common.isCustomerYN = userModel.getResult().get(0).getIsCustomerYN();
+                                    edtPhone.setVisibility(View.VISIBLE);
+//                                    edtHoten.setVisibility(View.VISIBLE);
+//                                    chkDangky.setVisibility(View.VISIBLE);
+                                    btnLogin.setVisibility(View.VISIBLE);
+                                    btnSignUp.setVisibility(View.VISIBLE);
+                                    outlinedTextField.setVisibility(View.VISIBLE);
+//                                    outlinedTextField2.setVisibility(View.VISIBLE);
+//                                    Toast.makeText(MainActivity.this, "May khach.!", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(MainActivity.this, "Lỗi, vui lòng liên hệ tiếp tân.!", Toast.LENGTH_SHORT).show();
+                                Common.isCustomerYN = "Y";
+//                                Toast.makeText(MainActivity.this, "Lỗi, vui lòng liên hệ tiếp tân.!", Toast.LENGTH_SHORT).show();
+                                edtPhone.setVisibility(View.VISIBLE);
+//                                    edtHoten.setVisibility(View.VISIBLE);
+//                                    chkDangky.setVisibility(View.VISIBLE);
+                                btnLogin.setVisibility(View.VISIBLE);
+                                btnSignUp.setVisibility(View.VISIBLE);
+                                outlinedTextField.setVisibility(View.VISIBLE);
+//                                    outlinedTextField2.setVisibility(View.VISIBLE);
+//                                    Toast.makeText(MainActivity.this, "May khach.!", Toast.LENGTH_SHORT).show();
                             }
                         },
                         throwable -> {

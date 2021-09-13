@@ -1,29 +1,29 @@
 package com.example.mcdonalds.Model;
 
 public class Store {
-    private String StoreId, StoreName, StoreAddress;
+    private String storeid, storename, storeaddress;
 
     public String getStoreId() {
-        return StoreId;
+        return storeid;
     }
 
     public void setStoreId(String storeId) {
-        StoreId = storeId;
+        storeid = storeId;
     }
 
     public String getStoreName() {
-        return StoreName;
+        return storename;
     }
 
     public void setStoreName(String storeName) {
-        StoreName = storeName;
+        storename = storeName;
     }
 
     public String getStoreAddress() {
-        return StoreAddress;
+        return storeaddress;
     }
 
     public void setStoreAddress(String storeAddress) {
-        StoreAddress = storeAddress;
+        storeaddress = storeAddress;
     }
 }

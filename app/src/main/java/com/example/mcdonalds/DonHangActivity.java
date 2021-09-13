@@ -39,6 +39,7 @@ import com.example.mcdonalds.Retrofit.IMcDonaldsAPI;
 import com.example.mcdonalds.Retrofit.RetrofitClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.gson.Gson;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 
@@ -50,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.ButterKnife;
 import io.reactivex.SingleObserver;
@@ -63,8 +65,9 @@ public class DonHangActivity extends AppCompatActivity {
     RecyclerView recycler_cart, recycler_store;
     TextView txt_final_price;
     Button btn_order;
-    RadioButton rad_OrderQuay, rad_OrderTruoc;
+    //    RadioButton rad_OrderQuay, rad_OrderTruoc;
     AutoCompleteTextView cmb_cuahang;
+    String storeId = "", orderId = "";
 
     IMcDonaldsAPI iMcDonaldsAPI;
     BackgroundSliderAdapter adapter;
@@ -88,10 +91,10 @@ public class DonHangActivity extends AppCompatActivity {
         recycler_cart = (RecyclerView) findViewById(R.id.recycler_cart);
         txt_final_price = (TextView) findViewById(R.id.txt_final_price);
         btn_order = (Button) findViewById(R.id.btn_order);
-        rad_OrderQuay = (RadioButton) findViewById(R.id.rad_orderquay);
-        rad_OrderTruoc = (RadioButton) findViewById(R.id.rad_ordertruoc);
-        recycler_store = (RecyclerView) findViewById(R.id.recycler_store);
-        cmb_cuahang = (AutoCompleteTextView) findViewById(R.id.cmb_cuahang);
+//        rad_OrderQuay = (RadioButton) findViewById(R.id.rad_orderquay);
+//        rad_OrderTruoc = (RadioButton) findViewById(R.id.rad_ordertruoc);
+//        recycler_store = (RecyclerView) findViewById(R.id.recycler_store);
+//        cmb_cuahang = (AutoCompleteTextView) findViewById(R.id.cmb_cuahang);
 
         init();
         initView();
@@ -124,20 +127,20 @@ public class DonHangActivity extends AppCompatActivity {
             }
         });
 
-        cmb_cuahang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String storeName = cmb_cuahang.getText().toString();
-                String storeId = "";
-                if (storeName.compareTo(storeList.get(i).getStoreName()) == 0) {
-                    storeId = storeList.get(i).getStoreId();
-                    Toast.makeText(DonHangActivity.this, "Store Id " + storeId, Toast.LENGTH_SHORT).show();
-                }
-//                for(int j = 0; j < storeList.size(); j++){
-//
+//        cmb_cuahang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                String storeName = cmb_cuahang.getText().toString();
+//                String storeId = "";
+//                if (storeName.compareTo(storeList.get(i).getStoreName()) == 0) {
+//                    storeId = storeList.get(i).getStoreId();
+//                    Toast.makeText(DonHangActivity.this, "Store Id " + storeId, Toast.LENGTH_SHORT).show();
 //                }
-            }
-        });
+////                for(int j = 0; j < storeList.size(); j++){
+////
+////                }
+//            }
+//        });
     }
 
     private void getAllStore() {
@@ -162,7 +165,12 @@ public class DonHangActivity extends AppCompatActivity {
                         btn_order.setEnabled(false);
                         btn_order.setBackgroundResource(android.R.color.darker_gray);
                     } else {
-                        btn_order.setText(getString(R.string.place_order));
+                        if (Common.isCustomerYN.compareTo("N") == 0) {
+                            btn_order.setText(getString(R.string.thanhtoan));
+                        } else {
+                            btn_order.setText(getString(R.string.place_order));
+                        }
+
                         btn_order.setEnabled(true);
                         btn_order.setBackgroundResource(R.color.design_default_color_primary);
                         MyCartAdapter adapter = new MyCartAdapter(DonHangActivity.this, cartItems);
@@ -170,6 +178,20 @@ public class DonHangActivity extends AppCompatActivity {
                         calculateCartTotalPrice();
                     }
 
+                }, throwable -> {
+                    Toast.makeText(this, "[GET CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }));
+    }
+
+    private void clearAllItemInCart() {
+        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(cartItems -> {
+                    if (cartItems.isEmpty()) {
+                        recycler_cart.setAdapter(null);
+                    }
                 }, throwable -> {
                     Toast.makeText(this, "[GET CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -193,7 +215,11 @@ public class DonHangActivity extends AppCompatActivity {
                             btn_order.setEnabled(false);
                             btn_order.setBackgroundResource(android.R.color.darker_gray);
                         } else {
-                            btn_order.setText(getString(R.string.place_order));
+                            if (Common.isCustomerYN.compareTo("N") == 0) {
+                                btn_order.setText(getString(R.string.thanhtoan));
+                            } else {
+                                btn_order.setText(getString(R.string.place_order));
+                            }
                             btn_order.setEnabled(true);
                             btn_order.setBackgroundResource(R.color.DoDam);
                         }
@@ -227,65 +253,131 @@ public class DonHangActivity extends AppCompatActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if (rad_OrderQuay.isChecked()) {
-            cmb_cuahang.setEnabled(false);
-        } else {
-            cmb_cuahang.setEnabled(true);
-        }
+//        if (rad_OrderQuay.isChecked()) {
+//            cmb_cuahang.setEnabled(false);
+//        } else {
+//            cmb_cuahang.setEnabled(true);
+//        }
 
         recycler_cart.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recycler_cart.setLayoutManager(layoutManager);
         recycler_cart.addItemDecoration(new DividerItemDecoration(this, layoutManager.getOrientation()));
-
+        checkOrder();
         btn_order.setOnClickListener(v -> {
-            EventBus.getDefault().postSticky(new SendTotalCashEvent(txt_final_price.getText().toString()));
-            Toast.makeText(this, "Bạn đặt hàng thành công", Toast.LENGTH_SHORT).show();
-        });
+//            EventBus.getDefault().postSticky(new SendTotalCashEvent(txt_final_price.getText().toString()));
+            Common.totalCash = Float.parseFloat(txt_final_price.getText().toString());
+            if (Common.isCustomerYN.compareTo("N") == 0) {
+                getOrderNumer(false);
+//                Toast.makeText(this, "Bạn đặt hàng thành công", Toast.LENGTH_SHORT).show();
+            } else {
+                startActivity(new Intent(DonHangActivity.this, PlaceOrderActivity.class));
+            }
 
-        rad_OrderQuay.setOnClickListener(view -> {
-            chkOrder = false;
-            checkOrder();
         });
+//        rad_OrderQuay.setOnClickListener(view -> {
+//            chkOrder = false;
+//            checkOrder();
+//        });
+//
+//        rad_OrderTruoc.setOnClickListener(view -> {
+//            chkOrder = true;
+//            checkOrder();
+//        });
+    }
 
-        rad_OrderTruoc.setOnClickListener(view -> {
-            chkOrder = true;
-            checkOrder();
-        });
+    private void getOrderNumer(boolean isOnlinePayment) {
+        orderId = UUID.randomUUID().toString();
+        if (!isOnlinePayment) {
+            String address = "";
+            compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(cartItems -> {
+                        compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, true, Common.totalCash, address)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(createOrderModel -> {
+                                    if (createOrderModel.isSuccess()) {
+                                        compositeDisposable.add(iMcDonaldsAPI.createOrderDetail(Common.API_KEY, orderId, new Gson().toJson(cartItems))
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe(updateOrderModel -> {
+                                                    if (updateOrderModel.isSuccess()) {
+                                                        cartDataSource.cleanCart(Common.currentUser.getUserPhone())
+                                                                .subscribeOn(Schedulers.io())
+                                                                .observeOn(AndroidSchedulers.mainThread())
+                                                                .subscribe(new SingleObserver<Integer>() {
+                                                                    @Override
+                                                                    public void onSubscribe(@NonNull Disposable d) {
+
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onSuccess(@NonNull Integer integer) {
+                                                                        Toast.makeText(DonHangActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                                                                        clearAllItemInCart();
+//                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
+//                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                                                        startActivity(homeActivity);
+
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onError(@NonNull Throwable e) {
+                                                                        Toast.makeText(DonHangActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                    }
+
+                                                }, throwable -> {
+                                                    Toast.makeText(this, "[UPDATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }));
+                                    } else {
+                                        Toast.makeText(this, "[CREATE ORDER]" + createOrderModel.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }, throwable -> {
+                                    //Toast.makeText(this, "[CREATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }));
+                    }, throwable -> {
+                        Toast.makeText(this, "[GET ALL CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }));
+        }
     }
 
     private void checkOrder() {
-        if (chkOrder == false) {
-            cmb_cuahang.setEnabled(false);
+        if (Common.isCustomerYN.compareTo("N") == 0) {
+//            cmb_cuahang.setEnabled(false);
             btn_order.setText("Thanh Toán");
         } else {
-            cmb_cuahang.setEnabled(true);
+//            cmb_cuahang.setEnabled(true);
             btn_order.setText("Đặt Hàng");
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void processStoreLoadEvent(StoreLoadEvent event) {
-        if (event.isSuccess()) {
-            recycler_store.setHasFixedSize(true);
-            recycler_store.setLayoutManager(new LinearLayoutManager(this));
-            recycler_store.setAdapter(new StoreAdapter(DonHangActivity.this, event.getStoreList()));
-
-            storeList = event.getStoreList();
-
-            List<String> storeName = new ArrayList<String>();
-            for (Store store : storeList) {
-                storeName.add(store.getStoreName());
-            }
-
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, storeName);
-            cmb_cuahang.setAdapter(arrayAdapter);
-
-
-        } else {
-            Toast.makeText(this, "[STORE LOAD]", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void processStoreLoadEvent(StoreLoadEvent event) {
+//        if (event.isSuccess()) {
+//            recycler_store.setHasFixedSize(true);
+//            recycler_store.setLayoutManager(new LinearLayoutManager(this));
+//            recycler_store.setAdapter(new StoreAdapter(DonHangActivity.this, event.getStoreList()));
+//
+//            storeList = event.getStoreList();
+//
+//            List<String> storeName = new ArrayList<String>();
+//            for (Store store : storeList) {
+//                storeName.add(store.getStoreName());
+//            }
+//
+//            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, storeName);
+//            cmb_cuahang.setAdapter(arrayAdapter);
+//
+//
+//        } else {
+//            Toast.makeText(this, "[STORE LOAD]", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     private void init() {
         iMcDonaldsAPI = RetrofitClient.getInstance(Common.API_RESTAURANT_ENDPOINT).create(IMcDonaldsAPI.class);

@@ -1,26 +1,26 @@
 package com.example.mcdonalds.Model;
 
 public class Table {
-    String TableId, TableName;
+    String tableid, tablename;
 
     public Table(String tableId, String tableName) {
-        TableId = tableId;
-        TableName = tableName;
+        tableid = tableId;
+        tablename = tableName;
     }
 
     public String getTableId() {
-        return TableId;
+        return tableid;
     }
 
     public void setTableId(String tableId) {
-        TableId = tableId;
+        tableid = tableId;
     }
 
     public String getTableName() {
-        return TableName;
+        return tablename;
     }
 
     public void setTableName(String tableName) {
-        TableName = tableName;
+        tablename = tableName;
     }
 }

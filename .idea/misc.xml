@@ -8,14 +8,16 @@
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/drawable/ic_baseline_attach_money_24.xml" value="0.21851851851851853" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_cart_list.xml" value="0.33" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_category.xml" value="0.2758152173913043" />
-        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_don_hang.xml" value="0.33" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_create_user.xml" value="0.3055555555555556" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_don_hang.xml" value="0.2474747474747475" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_food.xml" value="0.5" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_home.xml" value="0.22" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_place_order.xml" value="0.33" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_place_order.xml" value="0.5" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_user.xml" value="0.21614583333333334" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/dropdown_item.xml" value="0.1" />
-        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/fragment_home.xml" value="0.33" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/fragment_home.xml" value="0.22" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/fragment_user.xml" value="0.31145833333333334" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/layout_add_new_address.xml" value="0.13145896656534956" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/layout_cart.xml" value="0.33" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/layout_category.xml" value="0.1671195652173913" />

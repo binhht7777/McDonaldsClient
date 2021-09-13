@@ -21,6 +21,6 @@ public class FavoriteSliderAdapter extends SliderAdapter {
 
     @Override
     public void onBindImageSlide(int position, ImageSlideViewHolder imageSlideViewHolder) {
-        imageSlideViewHolder.bindImageSlide(favoriteList.get(position).getFoodImg());
+        imageSlideViewHolder.bindImageSlide(favoriteList.get(position).getFoodimg());
     }
 }

@@ -21,6 +21,6 @@ public class BackgroundSliderAdapter extends SliderAdapter {
 
     @Override
     public void onBindImageSlide(int position, ImageSlideViewHolder imageSlideViewHolder) {
-        imageSlideViewHolder.bindImageSlide(backgroundList.get(position).getBackgroundImg());
+        imageSlideViewHolder.bindImageSlide(backgroundList.get(position).getBackgroundimg());
     }
 }

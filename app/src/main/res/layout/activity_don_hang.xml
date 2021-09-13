@@ -71,75 +71,37 @@
                 android:textColor="@color/DoDam"
                 android:textSize="@dimen/font_size_20" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:weightSum="10">
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <RadioButton
-                    android:id="@+id/rad_orderquay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Đặt hàng tại quầy"
-                    android:checked="true"
-                    android:textSize="@dimen/font_size_14"
-                    android:fontFamily="@font/tahoma"
-                    android:textColor="@color/DoDam"/>
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:padding="8dp"-->
+<!--            android:weightSum="10">-->
+<!--            <RadioGroup-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
+<!--                <RadioButton-->
+<!--                    android:id="@+id/rad_orderquay"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Đặt hàng tại quầy"-->
+<!--                    android:checked="true"-->
+<!--                    android:textSize="@dimen/font_size_14"-->
+<!--                    android:fontFamily="@font/tahoma"-->
+<!--                    android:textColor="@color/DoDam"/>-->
 
-                <RadioButton
-                    android:id="@+id/rad_ordertruoc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Đặt hàng trước"
-                    android:textSize="@dimen/font_size_14"
-                    android:fontFamily="@font/tahoma"
-                    android:textColor="@color/DoDam"/>
-            </RadioGroup>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/tahoma"
-                android:padding="8dp"
-                android:text="Thanh toán"
-                android:textColor="@color/DoDam"
-                android:textSize="@dimen/font_size_14" />
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp">
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <RadioButton
-                        android:id="@+id/rdi_ood"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:fontFamily="@font/tahoma"
-                        android:text="Thanh toán tiền mặt"
-                        android:textSize="@dimen/font_size_12" />
-
-                    <RadioButton
-                        android:id="@+id/rdi_online_payment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:fontFamily="@font/tahoma"
-                        android:text="Thanh toán QR Code"
-                        android:textSize="@dimen/font_size_12" />
-                </RadioGroup>
-
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
+<!--                <RadioButton-->
+<!--                    android:id="@+id/rad_ordertruoc"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Đặt hàng trước"-->
+<!--                    android:textSize="@dimen/font_size_14"-->
+<!--                    android:fontFamily="@font/tahoma"-->
+<!--                    android:textColor="@color/DoDam"/>-->
+<!--            </RadioGroup>-->
+<!--            -->
+<!--        </LinearLayout>-->
 
 <!--        <LinearLayout-->
 <!--            android:layout_width="match_parent"-->
@@ -227,7 +189,7 @@
             android:layout_marginBottom="56dp"
             android:background="@color/DoDam"
             android:fontFamily="@font/tahoma"
-            android:text="Order"
+            android:text=""
             android:textAllCaps="true"
             android:textColor="@color/xamnhat" />
     </LinearLayout>

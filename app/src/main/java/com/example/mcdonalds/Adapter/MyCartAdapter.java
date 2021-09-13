@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mcdonalds.Common.Common;
 import com.example.mcdonalds.Database.CartDataSource;
 import com.example.mcdonalds.Database.CartDatabase;
 import com.example.mcdonalds.Database.CartItem;
@@ -118,6 +119,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
                             }
                         });
             }
+            Common.myCartItemList = cartItemList;
         }));
     }
 

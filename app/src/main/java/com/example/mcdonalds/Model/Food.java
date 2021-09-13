@@ -1,54 +1,54 @@
 package com.example.mcdonalds.Model;
 
 public class Food {
-    private String CategoryId, FoodId, FoodName, FoodImg;
-    private float Price;
+    private String categoryid, foodid, foodname, foodimg;
+    private float price;
 
-    public Food(String categoryId, String foodId, String foodName, String foodImg, float price) {
-        CategoryId = categoryId;
-        FoodId = foodId;
-        FoodName = foodName;
-        FoodImg = foodImg;
-        Price = price;
+    public Food(String categoryid, String foodid, String foodname, String foodimg, float price) {
+        this.categoryid = categoryid;
+        this.foodid = foodid;
+        this.foodname = foodname;
+        this.foodimg = foodimg;
+        this.price = price;
     }
 
-    public String getCategoryId() {
-        return CategoryId;
+    public String getCategoryid() {
+        return categoryid;
     }
 
-    public void setCategoryId(String categoryId) {
-        CategoryId = categoryId;
+    public void setCategoryid(String categoryid) {
+        this.categoryid = categoryid;
     }
 
-    public String getFoodId() {
-        return FoodId;
+    public String getFoodid() {
+        return foodid;
     }
 
-    public void setFoodId(String foodId) {
-        FoodId = foodId;
+    public void setFoodid(String foodid) {
+        this.foodid = foodid;
     }
 
-    public String getFoodName() {
-        return FoodName;
+    public String getFoodname() {
+        return foodname;
     }
 
-    public void setFoodName(String foodName) {
-        FoodName = foodName;
+    public void setFoodname(String foodname) {
+        this.foodname = foodname;
     }
 
-    public String getFoodImg() {
-        return FoodImg;
+    public String getFoodimg() {
+        return foodimg;
     }
 
-    public void setFoodImg(String foodImg) {
-        FoodImg = foodImg;
+    public void setFoodimg(String foodimg) {
+        this.foodimg = foodimg;
     }
 
     public float getPrice() {
-        return Price;
+        return price;
     }
 
     public void setPrice(float price) {
-        Price = price;
+        this.price = price;
     }
 }

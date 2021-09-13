@@ -1,44 +1,44 @@
 package com.example.mcdonalds.Model;
 
 public class User {
-    private String Imei, UserPhone, Name, IsCustomerYN;
+    private String imei, userphone, name, iscustomeryn;
 
     public User(String imei, String userPhone, String name, String isCustomerYN) {
-        Imei = imei;
-        UserPhone = userPhone;
-        Name = name;
-        IsCustomerYN = isCustomerYN;
+        imei = imei;
+        userphone = userPhone;
+        name = name;
+        iscustomeryn = isCustomerYN;
     }
 
     public String getImei() {
-        return Imei;
+        return imei;
     }
 
     public void setImei(String imei) {
-        Imei = imei;
+        imei = imei;
     }
 
     public String getUserPhone() {
-        return UserPhone;
+        return userphone;
     }
 
     public void setUserPhone(String userPhone) {
-        UserPhone = userPhone;
+        userphone = userPhone;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        name = name;
     }
 
     public String getIsCustomerYN() {
-        return IsCustomerYN;
+        return iscustomeryn;
     }
 
     public void setIsCustomerYN(String isCustomerYN) {
-        IsCustomerYN = isCustomerYN;
+        iscustomeryn = isCustomerYN;
     }
 }

@@ -2,13 +2,18 @@ package com.example.mcdonalds.Retrofit;
 
 
 import com.example.mcdonalds.Model.BackgroundModel;
+import com.example.mcdonalds.Model.CreateOrderModel;
 import com.example.mcdonalds.Model.FavoriteModel;
 import com.example.mcdonalds.Model.FoodModel;
 import com.example.mcdonalds.Model.Store;
 import com.example.mcdonalds.Model.StoreModel;
+import com.example.mcdonalds.Model.UpdateOrderModel;
 import com.example.mcdonalds.Model.UpdateUserModel;
 import com.example.mcdonalds.Model.UserModel;
 import com.example.mcdonalds.Model.CategorydModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -50,6 +55,31 @@ public interface IMcDonaldsAPI {
                                            @Field("userPhone") String userPhone,
                                            @Field("name") String name);
 
+    @POST("createorder")
+    @FormUrlEncoded
+    Observable<CreateOrderModel> createOrder(@Field("key") String apiKey,
+                                             @Field("orderId") String orderId,
+                                             @Field("imei") String imei,
+                                             @Field("userPhone") String userPhone,
+                                             @Field("storeId") String storeId,
+                                             @Field("cash") boolean cash,
+                                             @Field("total") Float total,
+                                             @Field("address") String address);
+
+    @POST("createorderdetail")
+    @FormUrlEncoded
+    Observable<UpdateOrderModel> createOrderDetail(@Field("key") String apiKey,
+                                                   @Field("orderId") String orderId,
+                                                   @Field("orderDetail") String orderDetail);
+
+    @POST("users")
+    @FormUrlEncoded
+    Observable<UpdateUserModel> updateUserInfo(@Field("key") String apiKey,
+                                               @Field("imei") String orderId,
+                                               @Field("userPhone") String orderDetail,
+                                               @Field("name") String name,
+                                               @Field("address") String address,
+                                               @Field("isCustomerYN") String isCustomerYN);
 
     // Get Category
     @GET("favorite")
