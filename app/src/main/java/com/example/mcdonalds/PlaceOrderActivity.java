@@ -2,6 +2,8 @@ package com.example.mcdonalds;
 
 import androidx.annotation.NonNull;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,17 +41,35 @@ import com.example.mcdonalds.Model.UpdateOrderModel;
 import com.example.mcdonalds.Retrofit.IMcDonaldsAPI;
 import com.example.mcdonalds.Retrofit.RetrofitClient;
 import com.example.mcdonalds.Services.PicassoImageLoadingService;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.stripe.android.ApiResultCallback;
+import com.stripe.android.PaymentIntentResult;
+import com.stripe.android.Stripe;
+import com.stripe.android.model.ConfirmPaymentIntentParams;
+import com.stripe.android.model.PaymentIntent;
+import com.stripe.android.model.PaymentMethodCreateParams;
+import com.stripe.android.view.CardInputWidget;
+
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import butterknife.ButterKnife;
@@ -57,14 +77,20 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import ss.com.bannerslider.Slider;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class PlaceOrderActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-    EditText edt_date;
+    TextView edt_date;
+    TextInputLayout outlinedTextField3;
     TextView txt_total_cash, txt_user_phone, txt_user_address, txt_new_address, text_name;
-    Button btn_add_new_address, btn_process;
+    Button btn_add_new_address, payButton;
     CheckBox ckb_default_address;
     RadioButton rdi_ood, rdi_online_payment;
     Toolbar toolbar;
@@ -73,6 +99,14 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
     String storeId = "", orderId = "";
     RecyclerView recycler_store;
 
+    //*************** Stripe
+    // 10.0.2.2 is the Android emulator's alias to localhost
+    private static final String BACKEND_URL = Common.API_RESTAURANT_ENDPOINT;
+
+    private OkHttpClient httpClient = new OkHttpClient();
+    private String paymentIntentClientSecret;
+    private Stripe stripe;
+    //*************** Stripe
 
     IMcDonaldsAPI iMcDonaldsAPI;
     BackgroundSliderAdapter adapter;
@@ -100,16 +134,17 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_order);
-        edt_date = (EditText) findViewById(R.id.edt_date);
+        edt_date = (TextView) findViewById(R.id.edt_date);
+//        outlinedTextField3 = (TextInputLayout) findViewById(R.id.outlinedTextField3);
         txt_total_cash = (TextView) findViewById(R.id.txt_total_cash);
         txt_user_phone = (TextView) findViewById(R.id.text_user_phone);
         txt_user_address = (TextView) findViewById(R.id.txt_user_address);
-//        txt_new_address = (TextView) findViewById(R.id.txt_new_address);
-//        btn_add_new_address = (Button) findViewById(R.id.btn_new_address);
-//        ckb_default_address = (CheckBox) findViewById(R.id.chk_default_address);
-        rdi_ood = (RadioButton) findViewById(R.id.rdi_ood);
-        rdi_online_payment = (RadioButton) findViewById(R.id.rdi_online_payment);
-        btn_process = (Button) findViewById(R.id.btn_processed);
+        //txt_new_address = (TextView) findViewById(R.id.txt_new_address);
+        //btn_add_new_address = (Button) findViewById(R.id.btn_new_address);
+        //ckb_default_address = (CheckBox) findViewById(R.id.chk_default_address);
+        //rdi_ood = (RadioButton) findViewById(R.id.rdi_ood);
+        //rdi_online_payment = (RadioButton) findViewById(R.id.rdi_online_payment);
+        payButton = (Button) findViewById(R.id.payButton);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         text_name = (TextView) findViewById(R.id.text_name);
         cmb_cuahang = (AutoCompleteTextView) findViewById(R.id.cmb_cuahang);
@@ -117,6 +152,17 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
         init();
         initView();
+
+        //******** Stripe
+        // Configure the SDK with your Stripe publishable key so it can make requests to Stripe
+        stripe = new Stripe(
+                getApplicationContext(),
+                Objects.requireNonNull("pk_test_51JZGEzFvYniupeojzk9qQNrYVbstkKXG5I4oY2HQj3RYROZP2eSiMHJbz31FFYrnrm2BFtuN2ZRCx2LmNM76VFwy00SYIfxeB4")
+        );
+        startCheckout();
+        //******** Stripe
+        getAllStore();
+
         cmb_cuahang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -133,11 +179,199 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         });
     }
 
+    //******** Stripe
+    private void startCheckout() {
+        // Create a PaymentIntent by calling the server's endpoint.
+        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        Float amount = Float.valueOf(txt_total_cash.getText().toString());
+        Map<String, Object> payMap = new HashMap<>();
+        Map<String, Object> itemMap = new HashMap<>();
+        List<Map<String, Object>> itemList = new ArrayList<>();
+        payMap.put("currency", Common.currency);
+        payMap.put("customer", Common.currentUser.getName());
+        itemMap.put("id", Common.Imei);
+        itemMap.put("amount", amount);
+        itemList.add(itemMap);
+        payMap.put("items", itemList);
+        String json = new Gson().toJson(payMap);
+
+        RequestBody body = RequestBody.create(json, mediaType);
+        Request request = new Request.Builder()
+                .url(BACKEND_URL + "create-payment-intent")
+                .post(body)
+                .build();
+        httpClient.newCall(request)
+                .enqueue(new PlaceOrderActivity.PayCallback(this));
+
+        // Hook up the pay button to the card widget and stripe instance
+        Button payButton = findViewById(R.id.payButton);
+
+        payButton.setOnClickListener((View view) -> {
+            try {
+                CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
+                PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
+                if (params != null) {
+                    ConfirmPaymentIntentParams confirmParams = ConfirmPaymentIntentParams
+                            .createWithPaymentMethodCreateParams(params, paymentIntentClientSecret);
+                    stripe.confirmPayment(this, confirmParams);
+                    cleanCard();
+                }
+            } catch (Exception e) {
+                Toast.makeText(this, "Thanh toán thành công.!", Toast.LENGTH_SHORT).show();
+                cleanCard();
+                finish();
+            }
+
+        });
+    }
+    //******** Stripe
+
+    private void cleanCard() {
+        cartDataSource.cleanCart(Common.currentUser.getUserPhone())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Integer>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Integer integer) {
+                        Toast.makeText(PlaceOrderActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Toast.makeText(PlaceOrderActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void displayAlert(@NonNull String title,
+                              @Nullable String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message);
+        builder.setPositiveButton("Ok", null);
+        builder.create().show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Handle the result of stripe.confirmPayment
+        stripe.onPaymentResult(requestCode, data, new PlaceOrderActivity.PaymentResultCallback(this));
+    }
+
+    private void onPaymentSuccess(@NonNull final Response response) throws IOException {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        Map<String, String> responseMap = gson.fromJson(
+                Objects.requireNonNull(response.body()).string(),
+                type
+        );
+
+        paymentIntentClientSecret = responseMap.get("clientSecret");
+    }
+
+    private static final class PayCallback implements Callback {
+        @NonNull
+        private final WeakReference<PlaceOrderActivity> activityRef;
+
+        PayCallback(@NonNull PlaceOrderActivity activity) {
+            activityRef = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            final PlaceOrderActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+
+            activity.runOnUiThread(() ->
+                    Toast.makeText(
+                            activity, "Error: " + e.toString(), Toast.LENGTH_LONG
+                    ).show()
+            );
+        }
+
+        @Override
+        public void onResponse(@NonNull Call call, @NonNull final Response response)
+                throws IOException {
+            final PlaceOrderActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+
+            if (!response.isSuccessful()) {
+                activity.runOnUiThread(() ->
+                        Toast.makeText(
+                                activity, "Error: " + response.toString(), Toast.LENGTH_LONG
+                        ).show()
+                );
+            } else {
+                activity.onPaymentSuccess(response);
+            }
+        }
+    }
+
+    private static final class PaymentResultCallback
+            implements ApiResultCallback<PaymentIntentResult> {
+        @NonNull
+        private final WeakReference<PlaceOrderActivity> activityRef;
+
+        PaymentResultCallback(@NonNull PlaceOrderActivity activity) {
+            activityRef = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onSuccess(@NonNull PaymentIntentResult result) {
+            final PlaceOrderActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+
+            PaymentIntent paymentIntent = result.getIntent();
+            PaymentIntent.Status status = paymentIntent.getStatus();
+            if (status == PaymentIntent.Status.Succeeded) {
+                // Payment completed successfully
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                activity.displayAlert(
+                        "Payment completed",
+                        gson.toJson(paymentIntent)
+                );
+            } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
+                // Payment failed – allow retrying using a different payment method
+                activity.displayAlert(
+                        "Payment failed",
+                        Objects.requireNonNull(paymentIntent.getLastPaymentError()).getMessage()
+                );
+            }
+        }
+
+        @Override
+        public void onError(@NonNull Exception e) {
+            final PlaceOrderActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+
+            // Payment request failed – allow retrying using the same payment method
+            activity.displayAlert("Error", e.toString());
+        }
+    }
+
+
     private void initView() {
         ButterKnife.bind(this);
         txt_user_phone.setText(Common.currentUser.getUserPhone());
         text_name.setText(Common.currentUser.getName());
         txt_total_cash.setText(Common.totalCash.toString());
+
         txt_total_cash.setEnabled(false);
         text_name.setEnabled(false);
         txt_user_phone.setEnabled(false);
@@ -147,23 +381,23 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        btn_add_new_address.setOnClickListener(v -> {
-            isAddNewAddr = true;
-            ckb_default_address.setChecked(false);
-            View layout_add_new_address = LayoutInflater.from(PlaceOrderActivity.this)
-                    .inflate(R.layout.layout_add_new_address, null);
-
-            EditText edt_new_address = (EditText) layout_add_new_address.findViewById(R.id.edt_add_new_address);
-            edt_new_address.setText(txt_new_address.getText().toString());
-            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(PlaceOrderActivity.this)
-                    .setTitle("Add New Address")
-                    .setView(layout_add_new_address)
-                    .setNegativeButton("Cancel", ((dialog, which) -> dialog.dismiss()))
-                    .setPositiveButton("Thêm mới", ((dialog, which) -> txt_new_address.setText(edt_new_address.getText().toString())));
-
-            androidx.appcompat.app.AlertDialog addNewAddressDialog = builder.create();
-            addNewAddressDialog.show();
-        });
+//        btn_add_new_address.setOnClickListener(v -> {
+//            isAddNewAddr = true;
+//            ckb_default_address.setChecked(false);
+//            View layout_add_new_address = LayoutInflater.from(PlaceOrderActivity.this)
+//                    .inflate(R.layout.layout_add_new_address, null);
+//
+//            EditText edt_new_address = (EditText) layout_add_new_address.findViewById(R.id.edt_add_new_address);
+//            edt_new_address.setText(txt_new_address.getText().toString());
+//            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(PlaceOrderActivity.this)
+//                    .setTitle("Add New Address")
+//                    .setView(layout_add_new_address)
+//                    .setNegativeButton("Cancel", ((dialog, which) -> dialog.dismiss()))
+//                    .setPositiveButton("Thêm mới", ((dialog, which) -> txt_new_address.setText(edt_new_address.getText().toString())));
+//
+//            androidx.appcompat.app.AlertDialog addNewAddressDialog = builder.create();
+//            addNewAddressDialog.show();
+//        });
 
         edt_date.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
@@ -173,93 +407,37 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
                     now.get(Calendar.DAY_OF_MONTH));
             dpd.show(getSupportFragmentManager(), "Datepickerdialog");
         });
-        btn_process.setOnClickListener(new View.OnClickListener() {
+
+        payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isSelectDate) {
                     Toast.makeText(PlaceOrderActivity.this, "Please select date", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!isAddNewAddr) {
-                    if (!ckb_default_address.isChecked()) {
-                        Toast.makeText(PlaceOrderActivity.this, "Please choose default address or set new address", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-                if (rdi_ood.isChecked()) {
-                    getOrderNumer(false);
-                } else if (rdi_online_payment.isChecked()) {
-                }
             }
         });
     }
 
-    private void getOrderNumer(boolean isOnlinePayment) {
-        if (!isOnlinePayment) {
-            orderId = UUID.randomUUID().toString();
-            String address = txt_user_address.getText().toString();
-            compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(cartItems -> {
-                        compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, true, Common.totalCash, address)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(createOrderModel -> {
-                                    if (createOrderModel.isSuccess()) {
-                                        String jSon = new Gson().toJson(cartItems);
-                                        compositeDisposable.add(iMcDonaldsAPI.createOrderDetail(Common.API_KEY, orderId, jSon)
-                                                .subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(updateOrderModel -> {
-                                                    if (updateOrderModel.isSuccess()) {
-                                                        cartDataSource.cleanCart(Common.currentUser.getUserPhone())
-                                                                .subscribeOn(Schedulers.io())
-                                                                .observeOn(AndroidSchedulers.mainThread())
-                                                                .subscribe(new SingleObserver<Integer>() {
-                                                                    @Override
-                                                                    public void onSubscribe(@NonNull Disposable d) {
-
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onSuccess(@NonNull Integer integer) {
-                                                                        Toast.makeText(PlaceOrderActivity.this, "Order Placed", Toast.LENGTH_SHORT).show();
-                                                                        Intent homeActivity = new Intent(PlaceOrderActivity.this, HomeActivity.class);
-                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                                        startActivity(homeActivity);
-                                                                        finish();
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onError(@NonNull Throwable e) {
-                                                                        Toast.makeText(PlaceOrderActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                });
-                                                    }
-
-                                                }, throwable -> {
-                                                    Toast.makeText(this, "[UPDATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }));
-                                    } else {
-                                        Toast.makeText(this, "[CREATE ORDER]" + createOrderModel.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }, throwable -> {
-                                    Toast.makeText(this, "[CREATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                }));
-                    }, throwable -> {
-                        Toast.makeText(this, "[GET ALL CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }));
-        }
+    private void getAllStore() {
+        compositeDisposable.add(iMcDonaldsAPI.getStore(Common.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(storeModel -> {
+                            EventBus.getDefault().post(new StoreLoadEvent(true, storeModel.getResult()));
+                        },
+                        throwable -> {
+                            Toast.makeText(this, "[LOAD STORE]", Toast.LENGTH_SHORT).show();
+                        }));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void processStoreLoadEvent(StoreLoadEvent event) {
         if (event.isSuccess()) {
-            recycler_store.setHasFixedSize(true);
-            recycler_store.setLayoutManager(new LinearLayoutManager(this));
-            recycler_store.setAdapter(new StoreAdapter(PlaceOrderActivity.this, event.getStoreList()));
-
+//            recycler_store.setHasFixedSize(true);
+//            recycler_store.setLayoutManager(new LinearLayoutManager(this));
+//            recycler_store.setAdapter(new StoreAdapter(PlaceOrderActivity.this, event.getStoreList()));
+//
             storeList = event.getStoreList();
 
             List<String> storeName = new ArrayList<String>();
@@ -287,7 +465,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         edt_date.setText(new StringBuilder("")
                 .append(monthOfYear + 1)
                 .append("/")
-                .append(dayOfMonth)
+                .append(dayOfMonth + 1)
                 .append("/")
                 .append(year));
     }
@@ -302,10 +480,5 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void setTotalCash(SendTotalCashEvent event) {
-        txt_total_cash.setText(String.valueOf(event.getCash()));
     }
 }

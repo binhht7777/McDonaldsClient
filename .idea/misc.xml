@@ -6,14 +6,17 @@
         <entry key="..\:/Android/Sdk/platforms/android-30/data/res/layout/simple_dropdown_item_1line.xml" value="0.13855116514690982" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.15052083333333333" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/drawable/ic_baseline_attach_money_24.xml" value="0.21851851851851853" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.14722222222222223" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.14722222222222223" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_cart_list.xml" value="0.33" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_category.xml" value="0.2758152173913043" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_checkout_java.xml" value="0.22916666666666666" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_create_user.xml" value="0.3055555555555556" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_don_hang.xml" value="0.2474747474747475" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_food.xml" value="0.5" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_home.xml" value="0.22" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_place_order.xml" value="0.5" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_place_order.xml" value="0.6011994002998501" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_user.xml" value="0.21614583333333334" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/dropdown_item.xml" value="0.1" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/fragment_home.xml" value="0.22" />

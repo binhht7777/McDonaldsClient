@@ -9,7 +9,7 @@ import com.example.mcdonalds.Model.Category;
 import java.util.List;
 
 public class Common {
-    public static String API_RESTAURANT_ENDPOINT = "http://192.168.1.4:3000/";
+    public static String API_RESTAURANT_ENDPOINT = "https://obscure-hamlet-06195.herokuapp.com/";
     public static final String API_KEY = "1234";
 
     public static final int DEFAULT_COLUMN_COUNT = 0;
@@ -22,5 +22,6 @@ public class Common {
     public static String isCustomerYN;
     public static Float totalCash;
     public static String Imei;
+    public static final String currency = "VND";
     public static List<CartItem> myCartItemList;
 }

@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.mcdonalds"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -67,4 +67,7 @@ dependencies {
     implementation 'com.github.smarteist:autoimageslider:1.3.9'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.0'
     implementation 'com.github.florent37:expansionpanel:1.2.4'
+    implementation 'com.stripe:stripe-android:15.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.4.0'
+    implementation 'com.google.code.gson:gson:2.8.8'
 }
