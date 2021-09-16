@@ -1,5 +1,6 @@
 package com.example.mcdonalds.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.example.mcdonalds.Database.CartDatabase;
 import com.example.mcdonalds.Database.CartItem;
 import com.example.mcdonalds.Database.LocalCartDataSource;
 import com.example.mcdonalds.Interface.IFoodDetailOrCartClickListener;
+import com.example.mcdonalds.Model.Favorite;
+import com.example.mcdonalds.Model.FavoriteOnlyId;
 import com.example.mcdonalds.Model.Food;
 import com.example.mcdonalds.R;
 import com.example.mcdonalds.Retrofit.IMcDonaldsAPI;
@@ -48,6 +51,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     IMcDonaldsAPI mcDonaldsAPI;
     CartDataSource cartDataSource;
     String orderDetailId;
+
     public void onStop() {
         completDisposable.clear();
 
@@ -93,8 +97,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         };
     }
 
-    @NonNull
-    @NotNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(context)
@@ -102,7 +104,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Picasso.get().load(foodList.get(position).getFoodimg())
                 .placeholder(null)
                 .into(holder.img_food);
@@ -139,6 +141,62 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                                             Toast.makeText(context, "[ADD ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                         })
                 );
+            }
+        });
+
+        // check favorite
+//        if (Common.currentFavoriteRestaurant != null && Common.currentFavoriteRestaurant.size() > 0) {
+//            if (Common.checkFavorite(foodList.get(position).getFoodid())) {
+//                holder.img_fav.setImageResource(R.drawable.ic_baseline_favorite_24);
+//                holder.img_fav.setTag(true);
+//            } else {
+//                holder.img_fav.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+//                holder.img_fav.setTag(false);
+//            }
+//        } else {
+//            holder.img_fav.setTag(false);
+//        }
+        holder.img_fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageView fav = (ImageView) v;
+                if ((Boolean) fav.getTag()) {
+                    completDisposable.add(mcDonaldsAPI.removeFavorite(Common.API_KEY,
+                            foodList.get(position).getFoodid(), 1)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(favoriteModel -> {
+                                        if (favoriteModel.isSuccess() && favoriteModel.getMessage().contains("Success")) {
+                                            fav.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                                            fav.setTag(false);
+                                            if (Common.currentFavoriteRestaurant != null) {
+                                                Common.removeFavorite(foodList.get(position).getFoodid());
+                                            }
+                                        }
+                                    },
+                                    throwable -> {
+//                                        Toast.makeText(context, "[REMOVE FAV]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }));
+                } else {
+                    completDisposable.add(mcDonaldsAPI.insertFavorite(Common.API_KEY,
+                            foodList.get(position).getFoodid(),
+                            foodList.get(position).getFoodname(),
+                            foodList.get(position).getFoodimg(), 1)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(favoriteModel -> {
+                                        if (favoriteModel.isSuccess() && favoriteModel.getMessage().contains("Success")) {
+                                            fav.setImageResource(R.drawable.ic_baseline_favorite_24);
+                                            fav.setTag(true);
+                                            if (Common.currentFavoriteRestaurant != null) {
+                                                Common.currentFavoriteRestaurant.add(new FavoriteOnlyId(foodList.get(position).getFoodid()));
+                                            }
+                                        }
+                                    },
+                                    throwable -> {
+                                        Toast.makeText(context, "[ADD FAV]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }));
+                }
             }
         });
     }

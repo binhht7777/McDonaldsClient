@@ -4,6 +4,7 @@ package com.example.mcdonalds.Retrofit;
 import com.example.mcdonalds.Model.BackgroundModel;
 import com.example.mcdonalds.Model.CreateOrderModel;
 import com.example.mcdonalds.Model.FavoriteModel;
+import com.example.mcdonalds.Model.FavoriteOnlyIdModel;
 import com.example.mcdonalds.Model.FoodModel;
 import com.example.mcdonalds.Model.Store;
 import com.example.mcdonalds.Model.StoreModel;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -85,8 +87,25 @@ public interface IMcDonaldsAPI {
     @GET("favorite")
     Observable<FavoriteModel> getFavorite(@Query("key") String apiKey);
 
+    @GET("favorite")
+    Observable<FavoriteOnlyIdModel> getFavorite2(@Query("key") String apiKey);
+
     @GET("store")
     Observable<StoreModel> getStore(@Query("key") String apiKey);
+
+    @POST("favorite")
+    @FormUrlEncoded
+    Observable<FavoriteModel> insertFavorite(@Field("key") String apiKey,
+                                             @Field("foodId") String foodId,
+                                             @Field("foodName") String foodName,
+                                             @Field("foodImg") String foodImg,
+                                             @Field("count") int count);
+
+
+    @DELETE("favorite")
+    Observable<FavoriteModel> removeFavorite(@Field("key") String apiKey,
+                                             @Field("foodId") String foodId,
+                                             @Field("count") int count);
 
 //    // GET nha hang
 //    @GET("restaurant")

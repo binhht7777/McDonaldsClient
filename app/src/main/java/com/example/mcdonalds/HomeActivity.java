@@ -54,6 +54,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -126,15 +127,18 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
             }
         });
-        sliderView=findViewById(R.id.image_slide);
+        sliderView = findViewById(R.id.image_slide);
 
         init();
         initView();
         LoadBackgroud();
         LoadFavorite();
+    }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFavoriteByRestaurant();
     }
 
     private void LoadBackgroud() {
@@ -158,6 +162,27 @@ public class HomeActivity extends AppCompatActivity {
                         },
                         throwable -> {
                             EventBus.getDefault().post(new FavoriteLoadEvent(false, throwable.getMessage()));
+                        }));
+    }
+
+    private void loadFavoriteByRestaurant() {
+        compositeDisposable.add(iMcDonaldsAPI.getFavorite2(Common.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(favoriteOnlyIdModel -> {
+                            if (favoriteOnlyIdModel.isSuccess()) {
+                                if (favoriteOnlyIdModel.getResult() != null && favoriteOnlyIdModel.getResult().size() > 0) {
+                                    Common.currentFavoriteRestaurant = favoriteOnlyIdModel.getResult();
+                                } else {
+                                    Common.currentFavoriteRestaurant = new ArrayList<>();
+                                }
+
+                            } else {
+//                                Toast.makeText(this, "[GET FAVORITE]" + favoriteOnlyIdModel.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        , throwable -> {
+                            Toast.makeText(this, "[GET FAVORITE]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                         }));
     }
 

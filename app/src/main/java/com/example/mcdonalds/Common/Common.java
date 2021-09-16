@@ -1,6 +1,7 @@
 package com.example.mcdonalds.Common;
 
 import com.example.mcdonalds.Database.CartItem;
+import com.example.mcdonalds.Model.FavoriteOnlyId;
 import com.example.mcdonalds.Model.Food;
 import com.example.mcdonalds.Model.Table;
 import com.example.mcdonalds.Model.User;
@@ -24,4 +25,23 @@ public class Common {
     public static String Imei;
     public static final String currency = "VND";
     public static List<CartItem> myCartItemList;
+    public static List<FavoriteOnlyId> currentFavoriteRestaurant;
+
+    public static boolean checkFavorite(String id) {
+        boolean result = false;
+        for (FavoriteOnlyId item : currentFavoriteRestaurant) {
+            if (item.getFoodId() == id) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public static void removeFavorite(String id) {
+        for (FavoriteOnlyId item : currentFavoriteRestaurant) {
+            if (item.getFoodId() == id) {
+                currentFavoriteRestaurant.remove(item);
+            }
+        }
+    }
 }
