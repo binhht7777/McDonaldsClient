@@ -112,19 +112,21 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.navigation_dashboard:
                         startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
                         overridePendingTransition(0, 0);
-                        return true;
+                        break;
                     case R.id.navigation_home:
-                        return true;
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        overridePendingTransition(0, 0);
+                        break;
                     case R.id.navigation_notifications:
                         startActivity(new Intent(getApplicationContext(), DonHangActivity.class));
                         overridePendingTransition(0, 0);
-                        return true;
+                        break;
                     case R.id.navigation_user:
                         startActivity(new Intent(getApplicationContext(), UserActivity.class));
                         overridePendingTransition(0, 0);
-                        return true;
+                        break;
                 }
-                return false;
+                return true;
             }
         });
         sliderView = findViewById(R.id.image_slide);

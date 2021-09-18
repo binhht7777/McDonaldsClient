@@ -22,29 +22,29 @@ public class UserActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_user);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
-                Fragment selectedFragmenet = null;
-                switch (menuItem.getItemId()) {
-                    case R.id.navigation_dashboard:
-                        startActivity(new Intent(getApplicationContext(),CategoryActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.navigation_home:
-                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.navigation_notifications:
-                        startActivity(new Intent(getApplicationContext(),DonHangActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.navigation_user:
-                        return true;
-                }
-                return false;
-            }
-        });
+//        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
+//                Fragment selectedFragmenet = null;
+//                switch (menuItem.getItemId()) {
+//                    case R.id.navigation_dashboard:
+//                        startActivity(new Intent(getApplicationContext(),CategoryActivity.class));
+//                        overridePendingTransition(0,0);
+//                        return true;
+//                    case R.id.navigation_home:
+//                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+//                        overridePendingTransition(0,0);
+//                        return true;
+//                    case R.id.navigation_notifications:
+//                        startActivity(new Intent(getApplicationContext(),DonHangActivity.class));
+//                        overridePendingTransition(0,0);
+//                        return true;
+//                    case R.id.navigation_user:
+//                        return true;
+//                }
+//                return false;
+//            }
+//        });
 
     }
 }

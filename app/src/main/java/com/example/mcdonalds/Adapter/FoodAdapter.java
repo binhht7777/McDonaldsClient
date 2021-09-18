@@ -145,17 +145,18 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         });
 
         // check favorite
-//        if (Common.currentFavoriteRestaurant != null && Common.currentFavoriteRestaurant.size() > 0) {
-//            if (Common.checkFavorite(foodList.get(position).getFoodid())) {
-//                holder.img_fav.setImageResource(R.drawable.ic_baseline_favorite_24);
-//                holder.img_fav.setTag(true);
-//            } else {
-//                holder.img_fav.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-//                holder.img_fav.setTag(false);
-//            }
-//        } else {
-//            holder.img_fav.setTag(false);
-//        }
+        if (Common.currentFavoriteRestaurant != null && Common.currentFavoriteRestaurant.size() > 0) {
+            if (Common.checkFavorite(foodList.get(position).getFoodid())) {
+                holder.img_fav.setImageResource(R.drawable.ic_baseline_favorite_24);
+                holder.img_fav.setTag(true);
+            } else {
+                holder.img_fav.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                holder.img_fav.setTag(false);
+            }
+        } else {
+            holder.img_fav.setTag(false);
+        }
+        //holder.img_fav.setTag(false);
         holder.img_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,7 +195,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                                         }
                                     },
                                     throwable -> {
-                                        Toast.makeText(context, "[ADD FAV]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(context, "[ADD FAV]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                     }));
                 }
             }
