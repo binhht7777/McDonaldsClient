@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.example.mcdonalds.Database.CartDatabase;
 import com.example.mcdonalds.Database.LocalCartDataSource;
 import com.example.mcdonalds.Retrofit.IMcDonaldsAPI;
 import com.example.mcdonalds.Retrofit.RetrofitClient;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -169,7 +171,9 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
 
                                                                     @Override
                                                                     public void onSuccess(@NonNull Integer integer) {
-                                                                        Toast.makeText(OrderActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                                                                        displayAlert(
+                                                                                "Thông báo",
+                                                                                "Thanh toán thành công.");
                                                                         clearAllItemInCart();
 //                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
 //                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -245,7 +249,9 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
 
             if (rdiCash.isChecked()) {
                 getOrderNumer(false);
-                Toast.makeText(this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, "Đặt hàng thành công.!", Snackbar.LENGTH_LONG)
+                        .setAction("Thông báo", null).show();
             } else {
                 try {
                     getOrderNumer(true);
@@ -256,9 +262,15 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
                                 .createWithPaymentMethodCreateParams(params, paymentIntentClientSecret);
                         stripe.confirmPayment(this, confirmParams);
                         cleanCard();
+                        displayAlert(
+                                "Thông báo",
+                                "Thanh toán thành công.");
                     }
                 } catch (Exception e) {
-                    Toast.makeText(this, "Thanh toán thành công.!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "Thanh toán thành công.!", Toast.LENGTH_SHORT).show();
+                    displayAlert(
+                            "Thông báo",
+                            "Thanh toán thành công.");
                     cleanCard();
                     finish();
                 }
@@ -279,7 +291,9 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
 
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
-                        Toast.makeText(OrderActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                        displayAlert(
+                                "Thông báo",
+                                "Thanh toán thành công.");
                     }
 
                     @Override

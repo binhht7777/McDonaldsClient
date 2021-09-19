@@ -91,11 +91,9 @@ public class MainActivity extends AppCompatActivity {
 //                                        Intent intent = new Intent(MainActivity.this, UpdateInfoActivity.class);
 //                                        startActivity(intent);
 //                                        finish();
-//                                        Snackbar.make(v, "Vui lòng đăng ký thông tin.!", Snackbar.LENGTH_LONG)
-//                                                .setAction("Thông báo", null).show();
-
-                                        Toast.makeText(MainActivity.this, "Vui lòng đăng ký thông tin.!", Toast.LENGTH_SHORT).show();
-
+                                        Snackbar.make(v, "Vui lòng đăng ký thông tin.!", Snackbar.LENGTH_LONG)
+                                                .setAction("Thông báo", null).show();
+//                                        Toast.makeText(MainActivity.this, "Vui lòng đăng ký thông tin.!", Toast.LENGTH_SHORT).show();
                                     }
                                 },
                                 throwable -> {

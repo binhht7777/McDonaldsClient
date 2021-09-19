@@ -22,6 +22,7 @@
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_place_order.xml" value="0.25" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/activity_user.xml" value="0.21614583333333334" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/dropdown_item.xml" value="0.1" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/favorite_slider.xml" value="0.24479166666666666" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/fragment_blank.xml" value="0.18020833333333333" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/layout/fragment_home.xml" value="0.22" />
@@ -35,6 +36,7 @@
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/menu/bottom_nav_menu.xml" value="0.134375" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/menu/category_search_menu.xml" value="0.1" />
         <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/menu/food_search_menu.xml" value="0.1" />
+        <entry key="..\:/Study/HTTTDD/DoAnCuoiKy/McDonaldsClient/app/src/main/res/menu/home.xml" value="0.18888888888888888" />
       </map>
     </option>
   </component>

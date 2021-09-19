@@ -26,6 +26,7 @@ import com.example.mcdonalds.Model.Food;
 import com.example.mcdonalds.R;
 import com.example.mcdonalds.Retrofit.IMcDonaldsAPI;
 import com.example.mcdonalds.Retrofit.RetrofitClient;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -135,7 +136,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(() -> {
-                                            Toast.makeText(context, "Add to order", Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(context, "Add to order", Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(view, "Đã thêm vào giỏ hàng.!", Snackbar.LENGTH_LONG)
+                                                    .setAction("Thông báo", null).show();
                                         },
                                         throwable -> {
                                             Toast.makeText(context, "[ADD ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();

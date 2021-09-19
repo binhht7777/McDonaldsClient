@@ -41,6 +41,7 @@ import com.example.mcdonalds.Model.UpdateOrderModel;
 import com.example.mcdonalds.Retrofit.IMcDonaldsAPI;
 import com.example.mcdonalds.Retrofit.RetrofitClient;
 import com.example.mcdonalds.Services.PicassoImageLoadingService;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -216,9 +217,14 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
                             .createWithPaymentMethodCreateParams(params, paymentIntentClientSecret);
                     stripe.confirmPayment(this, confirmParams);
                     cleanCard();
+                    displayAlert(
+                            "Thông báo",
+                            "Thanh toán thành công.");
                 }
             } catch (Exception e) {
-                Toast.makeText(this, "Thanh toán thành công.!", Toast.LENGTH_SHORT).show();
+                displayAlert(
+                        "Thông báo",
+                        "Thanh toán thành công.");
                 cleanCard();
                 finish();
             }
@@ -255,7 +261,9 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
                                                                     @Override
                                                                     public void onSuccess(@NonNull Integer integer) {
-                                                                        Toast.makeText(PlaceOrderActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                                                                        displayAlert(
+                                                                                "Thông báo",
+                                                                                "Thanh toán thành công.");
                                                                         cleanCard();
 //                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
 //                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -298,7 +306,9 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
-                        Toast.makeText(PlaceOrderActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                        displayAlert(
+                                "Thông báo",
+                                "Thanh toán thành công.");
                     }
 
                     @Override
