@@ -12,9 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.McDonalds"
         android:usesCleartextTraffic="true">
-<!--        <activity-->
-<!--            android:name=".CheckoutActivityJava"-->
-<!--            android:exported="true" />-->
+        <activity
+            android:name=".OrderActivity"
+            android:exported="true" />
+        <!-- <activity -->
+        <!-- android:name=".CheckoutActivityJava" -->
+        <!-- android:exported="true" /> -->
         <activity
             android:name=".CreateUserActivity"
             android:exported="true" />

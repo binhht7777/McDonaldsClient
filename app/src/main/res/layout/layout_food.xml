@@ -17,7 +17,7 @@
             android:scaleType="centerCrop" />
         <LinearLayout
             android:layout_height="wrap_content"
-            android:layout_weight="8.5"
+            android:layout_weight="8"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_marginLeft="8dp"
@@ -72,7 +72,7 @@
             android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:layout_gravity="top|right">
             <TextView
                 android:id="@+id/txtLike"
@@ -80,8 +80,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/xamdam"
                 android:fontFamily="@font/tahoma"
-                android:textSize="@dimen/font_size_12"
-                android:text="20"/>
+                android:textSize="@dimen/font_size_14"
+                android:text=""/>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

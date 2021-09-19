@@ -1,49 +1,30 @@
 package com.example.mcdonalds;
 
 import androidx.annotation.NonNull;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mcdonalds.Adapter.BackgroundSliderAdapter;
-import com.example.mcdonalds.Adapter.MyCartAdapter;
-import com.example.mcdonalds.Adapter.StoreAdapter;
 import com.example.mcdonalds.Common.Common;
-import com.example.mcdonalds.Database.CartDAO;
 import com.example.mcdonalds.Database.CartDataSource;
 import com.example.mcdonalds.Database.CartDatabase;
-import com.example.mcdonalds.Database.CartItem;
 import com.example.mcdonalds.Database.LocalCartDataSource;
-import com.example.mcdonalds.EventBus.SendTotalCashEvent;
-import com.example.mcdonalds.EventBus.StoreLoadEvent;
-import com.example.mcdonalds.Model.CreateOrderModel;
-import com.example.mcdonalds.Model.Store;
-import com.example.mcdonalds.Model.UpdateOrderModel;
 import com.example.mcdonalds.Retrofit.IMcDonaldsAPI;
 import com.example.mcdonalds.Retrofit.RetrofitClient;
-import com.example.mcdonalds.Services.PicassoImageLoadingService;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -54,12 +35,9 @@ import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
-
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -86,18 +64,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class PlaceOrderActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-    TextView edt_date;
-    TextInputLayout outlinedTextField3;
-    TextView txt_total_cash, txt_user_phone, txt_user_address, txt_new_address, text_name;
-    Button btn_add_new_address, payButton;
-    CheckBox ckb_default_address;
-    RadioButton rdi_ood, rdi_online_payment;
+public class OrderActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+    TextView tvTotal, tvDate, tvTable;
+    Button payButton;
+    RadioButton rdiCard, rdiCash;
     Toolbar toolbar;
-    AutoCompleteTextView cmb_cuahang;
-    List<Store> storeList;
     String storeId = "", orderId = "";
-    RecyclerView recycler_store;
+    RecyclerView recycler_cart;
+    String status = "";
+    String checkout = "";
+    boolean cash = false;
 
     //*************** Stripe
     // 10.0.2.2 is the Android emulator's alias to localhost
@@ -133,22 +109,14 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_place_order);
-        edt_date = (TextView) findViewById(R.id.edt_date);
-//        outlinedTextField3 = (TextInputLayout) findViewById(R.id.outlinedTextField3);
-        txt_total_cash = (TextView) findViewById(R.id.txt_total_cash);
-        txt_user_phone = (TextView) findViewById(R.id.text_user_phone);
-        txt_user_address = (TextView) findViewById(R.id.txt_user_address);
-        //txt_new_address = (TextView) findViewById(R.id.txt_new_address);
-        //btn_add_new_address = (Button) findViewById(R.id.btn_new_address);
-        //ckb_default_address = (CheckBox) findViewById(R.id.chk_default_address);
-        //rdi_ood = (RadioButton) findViewById(R.id.rdi_ood);
-        //rdi_online_payment = (RadioButton) findViewById(R.id.rdi_online_payment);
+        setContentView(R.layout.activity_order);
+        tvTotal = (TextView) findViewById(R.id.tvTotal);
+        tvDate = (TextView) findViewById(R.id.tvDate);
+        tvTable = (TextView) findViewById(R.id.tvTable);
         payButton = (Button) findViewById(R.id.payButton);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        text_name = (TextView) findViewById(R.id.text_name);
-        cmb_cuahang = (AutoCompleteTextView) findViewById(R.id.cmb_cuahang);
-        recycler_store = (RecyclerView) findViewById(R.id.recycler_store);
+        rdiCard = (RadioButton) findViewById(R.id.rdiCard);
+        rdiCash = (RadioButton) findViewById(R.id.rdiCard);
+        recycler_cart = (RecyclerView) findViewById(R.id.recycler_cart);
 
         init();
         initView();
@@ -161,80 +129,26 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         );
         startCheckout();
         //******** Stripe
-        getAllStore();
-
-        cmb_cuahang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String storeName = cmb_cuahang.getText().toString();
-                storeId = "";
-                if (storeName.compareTo(storeList.get(i).getStoreName()) == 0) {
-                    storeId = storeList.get(i).getStoreId();
-                    //Toast.makeText(PlaceOrderActivity.this, "Store Id " + storeId, Toast.LENGTH_SHORT).show();
-                }
-//                for(int j = 0; j < storeList.size(); j++){
-//
-//                }
-            }
-        });
     }
-
-    //******** Stripe
-    private void startCheckout() {
-        // Create a PaymentIntent by calling the server's endpoint.
-        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
-        Float amount = Float.valueOf(txt_total_cash.getText().toString());
-        Map<String, Object> payMap = new HashMap<>();
-        Map<String, Object> itemMap = new HashMap<>();
-        List<Map<String, Object>> itemList = new ArrayList<>();
-        payMap.put("currency", Common.currency);
-        payMap.put("customer", Common.currentUser.getName());
-        itemMap.put("id", Common.Imei);
-        itemMap.put("amount", amount);
-        itemList.add(itemMap);
-        payMap.put("items", itemList);
-        String json = new Gson().toJson(payMap);
-
-        RequestBody body = RequestBody.create(json, mediaType);
-        Request request = new Request.Builder()
-                .url(BACKEND_URL + "create-payment-intent")
-                .post(body)
-                .build();
-        httpClient.newCall(request)
-                .enqueue(new PlaceOrderActivity.PayCallback(this));
-
-        // Hook up the pay button to the card widget and stripe instance
-        Button payButton = findViewById(R.id.payButton);
-
-        payButton.setOnClickListener((View view) -> {
-            getOrderNumer(false);
-            try {
-                CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
-                PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
-                if (params != null) {
-                    ConfirmPaymentIntentParams confirmParams = ConfirmPaymentIntentParams
-                            .createWithPaymentMethodCreateParams(params, paymentIntentClientSecret);
-                    stripe.confirmPayment(this, confirmParams);
-                    cleanCard();
-                }
-            } catch (Exception e) {
-                Toast.makeText(this, "Thanh toán thành công.!", Toast.LENGTH_SHORT).show();
-                cleanCard();
-                finish();
-            }
-
-        });
-    }
-    //******** Stripe
 
     private void getOrderNumer(boolean isOnlinePayment) {
+        if (isOnlinePayment == false) {
+            status = "WAITING";
+            checkout = "N";
+            cash = false;
+        } else {
+            status = "WAITING";
+            checkout = "Y";
+            cash = true;
+        }
         orderId = UUID.randomUUID().toString();
         if (!isOnlinePayment) {
+            String address = "";
             compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(cartItems -> {
-                        compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, false, Common.totalCash, "WAITING", "Y", txt_user_address.getText().toString())
+                        compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, cash, Common.totalCash, status, checkout, address)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(createOrderModel -> {
@@ -255,8 +169,8 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
                                                                     @Override
                                                                     public void onSuccess(@NonNull Integer integer) {
-                                                                        Toast.makeText(PlaceOrderActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
-                                                                        cleanCard();
+                                                                        Toast.makeText(OrderActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                                                                        clearAllItemInCart();
 //                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
 //                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                                                                        startActivity(homeActivity);
@@ -265,7 +179,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
                                                                     @Override
                                                                     public void onError(@NonNull Throwable e) {
-                                                                        Toast.makeText(PlaceOrderActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        Toast.makeText(OrderActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                     }
                                                                 });
                                                     }
@@ -286,6 +200,73 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         }
     }
 
+    private void clearAllItemInCart() {
+        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(cartItems -> {
+                    if (cartItems.isEmpty()) {
+                        recycler_cart.setAdapter(null);
+                    }
+                }, throwable -> {
+                    Toast.makeText(this, "[GET CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }));
+    }
+
+    //******** Stripe
+    private void startCheckout() {
+        // Create a PaymentIntent by calling the server's endpoint.
+        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        Float amount = Float.valueOf(tvTotal.getText().toString());
+        Map<String, Object> payMap = new HashMap<>();
+        Map<String, Object> itemMap = new HashMap<>();
+        List<Map<String, Object>> itemList = new ArrayList<>();
+        payMap.put("currency", Common.currency);
+        payMap.put("customer", Common.currentUser.getName());
+        itemMap.put("id", Common.Imei);
+        itemMap.put("amount", amount);
+        itemList.add(itemMap);
+        payMap.put("items", itemList);
+        String json = new Gson().toJson(payMap);
+
+        RequestBody body = RequestBody.create(json, mediaType);
+        Request request = new Request.Builder()
+                .url(BACKEND_URL + "create-payment-intent")
+                .post(body)
+                .build();
+        httpClient.newCall(request)
+                .enqueue(new OrderActivity.PayCallback(this));
+
+        // Hook up the pay button to the card widget and stripe instance
+        Button payButton = findViewById(R.id.payButton);
+
+        payButton.setOnClickListener((View view) -> {
+
+            if (rdiCash.isChecked()) {
+                getOrderNumer(false);
+                Toast.makeText(this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    getOrderNumer(true);
+                    CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget2);
+                    PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
+                    if (params != null) {
+                        ConfirmPaymentIntentParams confirmParams = ConfirmPaymentIntentParams
+                                .createWithPaymentMethodCreateParams(params, paymentIntentClientSecret);
+                        stripe.confirmPayment(this, confirmParams);
+                        cleanCard();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(this, "Thanh toán thành công.!", Toast.LENGTH_SHORT).show();
+                    cleanCard();
+                    finish();
+                }
+            }
+        });
+    }
+    //******** Stripe
+
     private void cleanCard() {
         cartDataSource.cleanCart(Common.currentUser.getUserPhone())
                 .subscribeOn(Schedulers.io())
@@ -298,12 +279,12 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
-                        Toast.makeText(PlaceOrderActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OrderActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Toast.makeText(PlaceOrderActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OrderActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -322,7 +303,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         super.onActivityResult(requestCode, resultCode, data);
 
         // Handle the result of stripe.confirmPayment
-        stripe.onPaymentResult(requestCode, data, new PlaceOrderActivity.PaymentResultCallback(this));
+        stripe.onPaymentResult(requestCode, data, new OrderActivity.PaymentResultCallback(this));
     }
 
     private void onPaymentSuccess(@NonNull final Response response) throws IOException {
@@ -339,15 +320,15 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
     private static final class PayCallback implements Callback {
         @NonNull
-        private final WeakReference<PlaceOrderActivity> activityRef;
+        private final WeakReference<OrderActivity> activityRef;
 
-        PayCallback(@NonNull PlaceOrderActivity activity) {
+        PayCallback(@NonNull OrderActivity activity) {
             activityRef = new WeakReference<>(activity);
         }
 
         @Override
         public void onFailure(@NonNull Call call, @NonNull IOException e) {
-            final PlaceOrderActivity activity = activityRef.get();
+            final OrderActivity activity = activityRef.get();
             if (activity == null) {
                 return;
             }
@@ -362,7 +343,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         @Override
         public void onResponse(@NonNull Call call, @NonNull final Response response)
                 throws IOException {
-            final PlaceOrderActivity activity = activityRef.get();
+            final OrderActivity activity = activityRef.get();
             if (activity == null) {
                 return;
             }
@@ -382,15 +363,15 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
     private static final class PaymentResultCallback
             implements ApiResultCallback<PaymentIntentResult> {
         @NonNull
-        private final WeakReference<PlaceOrderActivity> activityRef;
+        private final WeakReference<OrderActivity> activityRef;
 
-        PaymentResultCallback(@NonNull PlaceOrderActivity activity) {
+        PaymentResultCallback(@NonNull OrderActivity activity) {
             activityRef = new WeakReference<>(activity);
         }
 
         @Override
         public void onSuccess(@NonNull PaymentIntentResult result) {
-            final PlaceOrderActivity activity = activityRef.get();
+            final OrderActivity activity = activityRef.get();
             if (activity == null) {
                 return;
             }
@@ -415,7 +396,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
         @Override
         public void onError(@NonNull Exception e) {
-            final PlaceOrderActivity activity = activityRef.get();
+            final OrderActivity activity = activityRef.get();
             if (activity == null) {
                 return;
             }
@@ -425,43 +406,23 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         }
     }
 
-
     private void initView() {
         ButterKnife.bind(this);
-        txt_user_phone.setText(Common.currentUser.getUserPhone());
-        text_name.setText(Common.currentUser.getName());
-        txt_total_cash.setText(Common.totalCash.toString());
 
-        txt_total_cash.setEnabled(false);
-        text_name.setEnabled(false);
-        txt_user_phone.setEnabled(false);
+        tvTable.setText(Common.currentUser.getName());
+        tvTotal.setText(Common.totalCash.toString());
 
+        tvTable.setEnabled(false);
+        tvTotal.setEnabled(false);
 
         toolbar.setTitle(getString(R.string.place_order));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        btn_add_new_address.setOnClickListener(v -> {
-//            isAddNewAddr = true;
-//            ckb_default_address.setChecked(false);
-//            View layout_add_new_address = LayoutInflater.from(PlaceOrderActivity.this)
-//                    .inflate(R.layout.layout_add_new_address, null);
-//
-//            EditText edt_new_address = (EditText) layout_add_new_address.findViewById(R.id.edt_add_new_address);
-//            edt_new_address.setText(txt_new_address.getText().toString());
-//            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(PlaceOrderActivity.this)
-//                    .setTitle("Add New Address")
-//                    .setView(layout_add_new_address)
-//                    .setNegativeButton("Cancel", ((dialog, which) -> dialog.dismiss()))
-//                    .setPositiveButton("Thêm mới", ((dialog, which) -> txt_new_address.setText(edt_new_address.getText().toString())));
-//
-//            androidx.appcompat.app.AlertDialog addNewAddressDialog = builder.create();
-//            addNewAddressDialog.show();
-//        });
 
-        edt_date.setOnClickListener(v -> {
+        tvDate.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
-            DatePickerDialog dpd = DatePickerDialog.newInstance(PlaceOrderActivity.this,
+            DatePickerDialog dpd = DatePickerDialog.newInstance(OrderActivity.this,
                     now.get(Calendar.YEAR),
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH));
@@ -472,46 +433,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
             @Override
             public void onClick(View v) {
                 if (!isSelectDate) {
-                    Toast.makeText(PlaceOrderActivity.this, "Please select date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OrderActivity.this, "Please select date", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
         });
-    }
-
-    private void getAllStore() {
-        compositeDisposable.add(iMcDonaldsAPI.getStore(Common.API_KEY)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(storeModel -> {
-                            EventBus.getDefault().post(new StoreLoadEvent(true, storeModel.getResult()));
-                        },
-                        throwable -> {
-                            Toast.makeText(this, "[LOAD STORE]", Toast.LENGTH_SHORT).show();
-                        }));
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void processStoreLoadEvent(StoreLoadEvent event) {
-        if (event.isSuccess()) {
-//            recycler_store.setHasFixedSize(true);
-//            recycler_store.setLayoutManager(new LinearLayoutManager(this));
-//            recycler_store.setAdapter(new StoreAdapter(PlaceOrderActivity.this, event.getStoreList()));
-//
-            storeList = event.getStoreList();
-
-            List<String> storeName = new ArrayList<String>();
-            for (Store store : storeList) {
-                storeName.add(store.getStoreName());
-            }
-
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, storeName);
-            cmb_cuahang.setAdapter(arrayAdapter);
-
-
-        } else {
-            Toast.makeText(this, "[STORE LOAD]", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void init() {
@@ -522,7 +448,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         isSelectDate = true;
-        edt_date.setText(new StringBuilder("")
+        tvDate.setText(new StringBuilder("")
                 .append(monthOfYear + 1)
                 .append("/")
                 .append(dayOfMonth + 1)

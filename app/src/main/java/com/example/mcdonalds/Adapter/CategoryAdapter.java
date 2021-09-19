@@ -37,14 +37,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 
     Context context;
     List<Category> categoryList;
-    List<Category> categoryListOld;
-    private SelectedCategory selectedCategory;
 
     public CategoryAdapter(Context context, List<Category> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
-        this.categoryListOld = categoryList;
-        this.selectedCategory = selectedCategory;
     }
 
     @Override
@@ -108,10 +104,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         @Override
         public void onClick(View v) {
             listener.onCLick(v, getAdapterPosition());
-            selectedCategory.selectedCategory(categoryList.get(getAdapterPosition()));
         }
-    }
-    public interface SelectedCategory {
-        void selectedCategory(Category categoryModel);
     }
 }

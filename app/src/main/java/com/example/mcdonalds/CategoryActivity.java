@@ -29,6 +29,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -57,38 +58,64 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        loadFavoriteByRestaurant();
+    }
+
+    private void loadFavoriteByRestaurant() {
+        compositeDisposable.add(iMcDonaldsAPI.getAllFavorite2(Common.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(favoriteOnlyIdModel -> {
+                            if (favoriteOnlyIdModel.isSuccess()) {
+                                if (favoriteOnlyIdModel.getResult() != null && favoriteOnlyIdModel.getResult().size() > 0) {
+                                    Common.currentFavoriteRestaurant = favoriteOnlyIdModel.getResult();
+                                } else {
+                                    Common.currentFavoriteRestaurant = new ArrayList<>();
+                                }
+                            } else {
+//                                Toast.makeText(this, "[GET FAVORITE]" + favoriteOnlyIdModel.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        , throwable -> {
+                            Toast.makeText(this, "[GET FAVORITE]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        }));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
-        tvHoten=(TextView)findViewById(R.id.tvHoten);
-        tvPhone=(TextView)findViewById(R.id.tvPhone);
+        tvHoten = (TextView) findViewById(R.id.tvHoten);
+        tvPhone = (TextView) findViewById(R.id.tvPhone);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
-//        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
-//                Fragment selectedFragmenet = null;
-//                switch (menuItem.getItemId()) {
-//                    case R.id.navigation_dashboard:
-//                        return true;
-//                    case R.id.navigation_home:
-//                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-//                        overridePendingTransition(0,0);
-//                        return true;
-//                    case R.id.navigation_notifications:
-//                        startActivity(new Intent(getApplicationContext(),DonHangActivity.class));
-//                        overridePendingTransition(0,0);
-//                        return true;
-//                    case R.id.navigation_user:
-//                        startActivity(new Intent(getApplicationContext(),UserActivity.class));
-//                        overridePendingTransition(0,0);
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
+                Fragment selectedFragmenet = null;
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_dashboard:
+                        return true;
+                    case R.id.navigation_home:
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.navigation_notifications:
+                        startActivity(new Intent(getApplicationContext(), DonHangActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.navigation_user:
+                        startActivity(new Intent(getApplicationContext(), UserActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                }
+                return false;
+            }
+        });
 
         init();
         initView();
@@ -112,6 +139,7 @@ public class CategoryActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recycler_category.setLayoutManager(mLayoutManager);
+//        Toast.makeText(this, "User: " + Common.currentUser.getName(), Toast.LENGTH_SHORT).show();
         tvHoten.setText(Common.currentUser.getName());
         tvPhone.setText(Common.currentUser.getUserPhone());
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -135,7 +163,6 @@ public class CategoryActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
-
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)

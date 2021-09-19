@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Common {
     public static String API_RESTAURANT_ENDPOINT = "https://obscure-hamlet-06195.herokuapp.com/";
+    //    public static String API_RESTAURANT_ENDPOINT = "http://192.168.1.6:3000/";
     public static final String API_KEY = "1234";
 
     public static final int DEFAULT_COLUMN_COUNT = 0;
@@ -30,7 +31,7 @@ public class Common {
     public static boolean checkFavorite(String id) {
         boolean result = false;
         for (FavoriteOnlyId item : currentFavoriteRestaurant) {
-            if (item.getFoodId() == id) {
+            if (item.getFoodid().compareTo(id) == 0) {
                 result = true;
             }
         }
@@ -39,7 +40,7 @@ public class Common {
 
     public static void removeFavorite(String id) {
         for (FavoriteOnlyId item : currentFavoriteRestaurant) {
-            if (item.getFoodId() == id) {
+            if (item.getFoodid() == id) {
                 currentFavoriteRestaurant.remove(item);
             }
         }

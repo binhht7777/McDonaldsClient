@@ -112,21 +112,21 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.navigation_dashboard:
                         startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
                         overridePendingTransition(0, 0);
-                        break;
+                        return true;
                     case R.id.navigation_home:
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         overridePendingTransition(0, 0);
-                        break;
+                        return true;
                     case R.id.navigation_notifications:
                         startActivity(new Intent(getApplicationContext(), DonHangActivity.class));
                         overridePendingTransition(0, 0);
-                        break;
+                        return true;
                     case R.id.navigation_user:
                         startActivity(new Intent(getApplicationContext(), UserActivity.class));
                         overridePendingTransition(0, 0);
-                        break;
+                        return true;
                 }
-                return true;
+                return false;
             }
         });
         sliderView = findViewById(R.id.image_slide);
@@ -140,7 +140,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFavoriteByRestaurant();
+
     }
 
     private void LoadBackgroud() {
@@ -166,28 +166,6 @@ public class HomeActivity extends AppCompatActivity {
                             EventBus.getDefault().post(new FavoriteLoadEvent(false, throwable.getMessage()));
                         }));
     }
-
-    private void loadFavoriteByRestaurant() {
-        compositeDisposable.add(iMcDonaldsAPI.getFavorite2(Common.API_KEY)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(favoriteOnlyIdModel -> {
-                            if (favoriteOnlyIdModel.isSuccess()) {
-                                if (favoriteOnlyIdModel.getResult() != null && favoriteOnlyIdModel.getResult().size() > 0) {
-                                    Common.currentFavoriteRestaurant = favoriteOnlyIdModel.getResult();
-                                } else {
-                                    Common.currentFavoriteRestaurant = new ArrayList<>();
-                                }
-
-                            } else {
-//                                Toast.makeText(this, "[GET FAVORITE]" + favoriteOnlyIdModel.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        , throwable -> {
-                            Toast.makeText(this, "[GET FAVORITE]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                        }));
-    }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void processBackgroundLoadEvent(BackgroundLoadEvent event) {

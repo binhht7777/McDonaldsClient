@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     IMcDonaldsAPI mcDonaldsAPI;
     TextInputEditText edtPhone;
-    TextInputEditText edtHoten;
+    TextInputEditText edtPassword;
     Button btnLogin, btnSignUp;
     MaterialCheckBox chkDangky;
     String IMEI = "";
@@ -51,14 +51,16 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
         edtPhone = (TextInputEditText) findViewById(R.id.edtPhone);
-//        edtHoten = (TextInputEditText) findViewById(R.id.edtHoten);
+        edtPassword = (TextInputEditText) findViewById(R.id.edtPassword);
 //        chkDangky = (MaterialCheckBox) findViewById(R.id.chkdDangky);
         outlinedTextField = (TextInputLayout) findViewById(R.id.outlinedTextField);
-//        outlinedTextField2 = (TextInputLayout) findViewById(R.id.outlinedTextField2);
+        outlinedTextField2 = (TextInputLayout) findViewById(R.id.outlinedTextField2);
         edtPhone.setVisibility(View.INVISIBLE);
+        edtPassword.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.INVISIBLE);
         btnSignUp.setVisibility(View.INVISIBLE);
         outlinedTextField.setVisibility(View.INVISIBLE);
+        outlinedTextField2.setVisibility(View.INVISIBLE);
         IMEI = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         Common.Imei = IMEI;
 
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                compositeDisposable.add(mcDonaldsAPI.getUserByPhone(Common.API_KEY, edtPhone.getText().toString())
+                compositeDisposable.add(mcDonaldsAPI.getUserByPhone(Common.API_KEY, edtPhone.getText().toString(), edtPassword.getText().toString())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(userModel -> {
@@ -151,12 +153,12 @@ public class MainActivity extends AppCompatActivity {
                                 if (userModel.getResult().get(0).getIsCustomerYN().compareTo("N") == 0) {
                                     Common.isCustomerYN = userModel.getResult().get(0).getIsCustomerYN();
                                     edtPhone.setVisibility(View.INVISIBLE);
-//                                    edtHoten.setVisibility(View.INVISIBLE);
+                                    edtPassword.setVisibility(View.INVISIBLE);
 //                                    chkDangky.setVisibility(View.INVISIBLE);
                                     btnLogin.setVisibility(View.INVISIBLE);
                                     btnSignUp.setVisibility(View.INVISIBLE);
                                     outlinedTextField.setVisibility(View.INVISIBLE);
-//                                    outlinedTextField2.setVisibility(View.INVISIBLE);
+                                    outlinedTextField2.setVisibility(View.INVISIBLE);
 //                                    Toast.makeText(MainActivity.this, "May cua hang!", Toast.LENGTH_SHORT).show();
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
@@ -168,24 +170,24 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     Common.isCustomerYN = userModel.getResult().get(0).getIsCustomerYN();
                                     edtPhone.setVisibility(View.VISIBLE);
-//                                    edtHoten.setVisibility(View.VISIBLE);
+                                    edtPassword.setVisibility(View.VISIBLE);
 //                                    chkDangky.setVisibility(View.VISIBLE);
                                     btnLogin.setVisibility(View.VISIBLE);
                                     btnSignUp.setVisibility(View.VISIBLE);
                                     outlinedTextField.setVisibility(View.VISIBLE);
-//                                    outlinedTextField2.setVisibility(View.VISIBLE);
+                                    outlinedTextField2.setVisibility(View.VISIBLE);
 //                                    Toast.makeText(MainActivity.this, "May khach.!", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 Common.isCustomerYN = "Y";
 //                                Toast.makeText(MainActivity.this, "Lỗi, vui lòng liên hệ tiếp tân.!", Toast.LENGTH_SHORT).show();
                                 edtPhone.setVisibility(View.VISIBLE);
-//                                    edtHoten.setVisibility(View.VISIBLE);
+                                edtPassword.setVisibility(View.VISIBLE);
 //                                    chkDangky.setVisibility(View.VISIBLE);
                                 btnLogin.setVisibility(View.VISIBLE);
                                 btnSignUp.setVisibility(View.VISIBLE);
                                 outlinedTextField.setVisibility(View.VISIBLE);
-//                                    outlinedTextField2.setVisibility(View.VISIBLE);
+                                outlinedTextField2.setVisibility(View.VISIBLE);
 //                                    Toast.makeText(MainActivity.this, "May khach.!", Toast.LENGTH_SHORT).show();
                             }
                         },

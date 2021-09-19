@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -34,7 +35,8 @@ public interface IMcDonaldsAPI {
     //lay thong tin background
     @GET("userbyphone")
     Observable<UserModel> getUserByPhone(@Query("key") String apiKey,
-                                         @Query("userPhone") String userPhone);
+                                         @Query("userPhone") String userPhone,
+                                         @Query("passWord") String passWord);
 
     //lay thong tin background
     @GET("background")
@@ -66,6 +68,8 @@ public interface IMcDonaldsAPI {
                                              @Field("storeId") String storeId,
                                              @Field("cash") boolean cash,
                                              @Field("total") Float total,
+                                             @Field("status") String status,
+                                             @Field("checkout") String checkout,
                                              @Field("address") String address);
 
     @POST("createorderdetail")
@@ -87,8 +91,8 @@ public interface IMcDonaldsAPI {
     @GET("favorite")
     Observable<FavoriteModel> getFavorite(@Query("key") String apiKey);
 
-    @GET("favorite")
-    Observable<FavoriteOnlyIdModel> getFavorite2(@Query("key") String apiKey);
+    @GET("allfavorite")
+    Observable<FavoriteOnlyIdModel> getAllFavorite2(@Query("key") String apiKey);
 
     @GET("store")
     Observable<StoreModel> getStore(@Query("key") String apiKey);

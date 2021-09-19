@@ -103,29 +103,29 @@ public class DonHangActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_notifications);
-//        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
-//                Fragment selectedFragmenet = null;
-//                switch (menuItem.getItemId()) {
-//                    case R.id.navigation_dashboard:
-//                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
-//                        overridePendingTransition(0, 0);
-//                        return true;
-//                    case R.id.navigation_home:
-//                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-//                        overridePendingTransition(0, 0);
-//                        return true;
-//                    case R.id.navigation_notifications:
-//                        return true;
-//                    case R.id.navigation_user:
-//                        startActivity(new Intent(getApplicationContext(), UserActivity.class));
-//                        overridePendingTransition(0, 0);
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem menuItem) {
+                Fragment selectedFragmenet = null;
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_dashboard:
+                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.navigation_home:
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.navigation_notifications:
+                        return true;
+                    case R.id.navigation_user:
+                        startActivity(new Intent(getApplicationContext(), UserActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                }
+                return false;
+            }
+        });
 
 //        cmb_cuahang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -268,8 +268,8 @@ public class DonHangActivity extends AppCompatActivity {
 //            EventBus.getDefault().postSticky(new SendTotalCashEvent(txt_final_price.getText().toString()));
             Common.totalCash = Float.parseFloat(txt_final_price.getText().toString());
             if (Common.isCustomerYN.compareTo("N") == 0) {
-                getOrderNumer(false);
-//                Toast.makeText(this, "Bạn đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                //getOrderNumer(false);
+                startActivity(new Intent(DonHangActivity.this, OrderActivity.class));
             } else {
                 startActivity(new Intent(DonHangActivity.this, PlaceOrderActivity.class));
             }
@@ -286,73 +286,73 @@ public class DonHangActivity extends AppCompatActivity {
 //        });
     }
 
-    private void getOrderNumer(boolean isOnlinePayment) {
-        orderId = UUID.randomUUID().toString();
-        if (!isOnlinePayment) {
-            String address = "";
-            compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(cartItems -> {
-                        compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, true, Common.totalCash, address)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(createOrderModel -> {
-                                    if (createOrderModel.isSuccess()) {
-                                        compositeDisposable.add(iMcDonaldsAPI.createOrderDetail(Common.API_KEY, orderId, new Gson().toJson(cartItems))
-                                                .subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(updateOrderModel -> {
-                                                    if (updateOrderModel.isSuccess()) {
-                                                        cartDataSource.cleanCart(Common.currentUser.getUserPhone())
-                                                                .subscribeOn(Schedulers.io())
-                                                                .observeOn(AndroidSchedulers.mainThread())
-                                                                .subscribe(new SingleObserver<Integer>() {
-                                                                    @Override
-                                                                    public void onSubscribe(@NonNull Disposable d) {
-
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onSuccess(@NonNull Integer integer) {
-                                                                        Toast.makeText(DonHangActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
-                                                                        clearAllItemInCart();
-//                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
-//                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                                                        startActivity(homeActivity);
-
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onError(@NonNull Throwable e) {
-                                                                        Toast.makeText(DonHangActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                });
-                                                    }
-
-                                                }, throwable -> {
-                                                    Toast.makeText(this, "[UPDATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }));
-                                    } else {
-                                        Toast.makeText(this, "[CREATE ORDER]" + createOrderModel.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }, throwable -> {
-                                    //Toast.makeText(this, "[CREATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }));
-                    }, throwable -> {
-                        Toast.makeText(this, "[GET ALL CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }));
-        }
-    }
+//    private void getOrderNumer(boolean isOnlinePayment) {
+//        orderId = UUID.randomUUID().toString();
+//        if (!isOnlinePayment) {
+//            String address = "";
+//            compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(cartItems -> {
+//                        compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, true, Common.totalCash, address)
+//                                .subscribeOn(Schedulers.io())
+//                                .observeOn(AndroidSchedulers.mainThread())
+//                                .subscribe(createOrderModel -> {
+//                                    if (createOrderModel.isSuccess()) {
+//                                        compositeDisposable.add(iMcDonaldsAPI.createOrderDetail(Common.API_KEY, orderId, new Gson().toJson(cartItems))
+//                                                .subscribeOn(Schedulers.io())
+//                                                .observeOn(AndroidSchedulers.mainThread())
+//                                                .subscribe(updateOrderModel -> {
+//                                                    if (updateOrderModel.isSuccess()) {
+//                                                        cartDataSource.cleanCart(Common.currentUser.getUserPhone())
+//                                                                .subscribeOn(Schedulers.io())
+//                                                                .observeOn(AndroidSchedulers.mainThread())
+//                                                                .subscribe(new SingleObserver<Integer>() {
+//                                                                    @Override
+//                                                                    public void onSubscribe(@NonNull Disposable d) {
+//
+//                                                                    }
+//
+//                                                                    @Override
+//                                                                    public void onSuccess(@NonNull Integer integer) {
+//                                                                        Toast.makeText(DonHangActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+//                                                                        clearAllItemInCart();
+////                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
+////                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////                                                                        startActivity(homeActivity);
+//
+//                                                                    }
+//
+//                                                                    @Override
+//                                                                    public void onError(@NonNull Throwable e) {
+//                                                                        Toast.makeText(DonHangActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                                                    }
+//                                                                });
+//                                                    }
+//
+//                                                }, throwable -> {
+//                                                    Toast.makeText(this, "[UPDATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//                                                }));
+//                                    } else {
+//                                        Toast.makeText(this, "[CREATE ORDER]" + createOrderModel.getMessage(), Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }, throwable -> {
+//                                    //Toast.makeText(this, "[CREATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//                                    finish();
+//                                }));
+//                    }, throwable -> {
+//                        Toast.makeText(this, "[GET ALL CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }));
+//        }
+//    }
 
     private void checkOrder() {
         if (Common.isCustomerYN.compareTo("N") == 0) {
 //            cmb_cuahang.setEnabled(false);
-            btn_order.setText("Thanh Toán");
+            btn_order.setText("Checkout");
         } else {
 //            cmb_cuahang.setEnabled(true);
-            btn_order.setText("Đặt Hàng");
+            btn_order.setText("Checkout");
         }
     }
 

@@ -1,17 +1,17 @@
 package com.example.mcdonalds.Model;
 
 public class FavoriteOnlyId {
-    private String FoodId;
+    private String foodid;
 
-    public FavoriteOnlyId(String foodId) {
-        this.FoodId = foodId;
+    public FavoriteOnlyId(String foodid) {
+        this.foodid = foodid;
     }
 
-    public String getFoodId() {
-        return FoodId;
+    public String getFoodid() {
+        return foodid;
     }
 
-    public void setFoodId(String foodId) {
-        FoodId = foodId;
+    public void setFoodid(String foodid) {
+        this.foodid = foodid;
     }
 }
