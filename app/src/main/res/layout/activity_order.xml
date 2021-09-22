@@ -177,9 +177,8 @@
                                     android:id="@+id/rdiCard"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:checked="true"
                                     android:fontFamily="@font/tahoma"
-                                    android:text="Thanh toán the"
+                                    android:text="Thanh toán thẻ"
                                     android:textColor="@color/xamdam"
                                     android:textSize="@dimen/font_size_14" />
                             </RadioGroup>

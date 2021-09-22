@@ -148,7 +148,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         });
 
         // check favorite
-        if (Common.currentFavoriteRestaurant.size() > 0) {
+        if (Common.currentFavoriteRestaurant != null && Common.currentFavoriteRestaurant.size() > 0) {
             if (Common.checkFavorite(foodList.get(position).getFoodid())) {
                 holder.img_fav.setImageResource(R.drawable.ic_baseline_favorite_24);
                 holder.img_fav.setTag(true);

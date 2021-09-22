@@ -44,7 +44,25 @@ import com.example.mcdonalds.Services.PicassoImageLoadingService;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import android.content.DialogInterface;
 
+import android.content.Intent;
+
+import android.os.Bundle;
+
+import android.view.View;
+
+import android.widget.Button;
+
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import androidx.annotation.Nullable;
+
+import androidx.appcompat.app.AlertDialog;
+
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -55,7 +73,6 @@ import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
-
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -189,11 +206,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         Map<String, Object> itemMap = new HashMap<>();
         List<Map<String, Object>> itemList = new ArrayList<>();
         payMap.put("currency", Common.currency);
-        payMap.put("customer", Common.currentUser.getName());
-        itemMap.put("id", Common.Imei);
-        itemMap.put("amount", amount);
-        itemList.add(itemMap);
-        payMap.put("items", itemList);
+        payMap.put("amount", amount);
         String json = new Gson().toJson(payMap);
 
         RequestBody body = RequestBody.create(json, mediaType);
@@ -225,8 +238,8 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
                 displayAlert(
                         "Thông báo",
                         "Thanh toán thành công.");
-                cleanCard();
-                finish();
+//                cleanCard();
+//                finish();
             }
 
         });
@@ -261,9 +274,9 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
                                                                     @Override
                                                                     public void onSuccess(@NonNull Integer integer) {
-                                                                        displayAlert(
-                                                                                "Thông báo",
-                                                                                "Thanh toán thành công.");
+//                                                                        displayAlert(
+//                                                                                "Thông báo",
+//                                                                                "Thanh toán thành công.");
                                                                         cleanCard();
 //                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
 //                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -306,9 +319,9 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
-                        displayAlert(
-                                "Thông báo",
-                                "Thanh toán thành công.");
+//                        displayAlert(
+//                                "Thông báo",
+//                                "Thanh toán thành công.");
                     }
 
                     @Override

@@ -106,7 +106,7 @@ public interface IMcDonaldsAPI {
                                              @Field("count") int count);
 
 
-    @DELETE("favorite")
+    @POST("favorite")
     Observable<FavoriteModel> removeFavorite(@Field("key") String apiKey,
                                              @Field("foodId") String foodId,
                                              @Field("count") int count);

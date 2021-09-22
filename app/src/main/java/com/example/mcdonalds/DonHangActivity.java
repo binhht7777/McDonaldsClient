@@ -166,7 +166,7 @@ public class DonHangActivity extends AppCompatActivity {
                         btn_order.setBackgroundResource(android.R.color.darker_gray);
                     } else {
                         if (Common.isCustomerYN.compareTo("N") == 0) {
-                            btn_order.setText(getString(R.string.thanhtoan));
+                            btn_order.setText(getString(R.string.place_order));
                         } else {
                             btn_order.setText(getString(R.string.place_order));
                         }
@@ -216,7 +216,7 @@ public class DonHangActivity extends AppCompatActivity {
                             btn_order.setBackgroundResource(android.R.color.darker_gray);
                         } else {
                             if (Common.isCustomerYN.compareTo("N") == 0) {
-                                btn_order.setText(getString(R.string.thanhtoan));
+                                btn_order.setText(getString(R.string.place_order));
                             } else {
                                 btn_order.setText(getString(R.string.place_order));
                             }

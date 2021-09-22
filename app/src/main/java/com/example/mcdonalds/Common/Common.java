@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Common {
     public static String API_RESTAURANT_ENDPOINT = "https://obscure-hamlet-06195.herokuapp.com/";
-    //    public static String API_RESTAURANT_ENDPOINT = "http://192.168.1.6:3000/";
+//        public static String API_RESTAURANT_ENDPOINT = "http://192.168.1.6:3000/";
     public static final String API_KEY = "1234";
 
     public static final int DEFAULT_COLUMN_COUNT = 0;

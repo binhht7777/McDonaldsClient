@@ -37,6 +37,7 @@ import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
+import com.stripe.android.view.CardMultilineWidget;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,7 +69,7 @@ import okhttp3.Response;
 
 public class OrderActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     TextView tvTotal, tvDate, tvTable;
-    Button payButton;
+    Button payButton2;
     RadioButton rdiCard, rdiCash;
     Toolbar toolbar;
     String storeId = "", orderId = "";
@@ -76,6 +77,7 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
     String status = "";
     String checkout = "";
     boolean cash = false;
+    CardMultilineWidget cardInputWidget2;
 
     //*************** Stripe
     // 10.0.2.2 is the Android emulator's alias to localhost
@@ -115,10 +117,12 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
         tvTotal = (TextView) findViewById(R.id.tvTotal);
         tvDate = (TextView) findViewById(R.id.tvDate);
         tvTable = (TextView) findViewById(R.id.tvTable);
-        payButton = (Button) findViewById(R.id.payButton);
+        payButton2 = (Button) findViewById(R.id.payButton2);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         rdiCard = (RadioButton) findViewById(R.id.rdiCard);
-        rdiCash = (RadioButton) findViewById(R.id.rdiCard);
+        rdiCash = (RadioButton) findViewById(R.id.rdiCash);
         recycler_cart = (RecyclerView) findViewById(R.id.recycler_cart);
+        cardInputWidget2 = (CardMultilineWidget) findViewById(R.id.cardInputWidget2);
 
         init();
         initView();
@@ -131,10 +135,27 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
         );
         startCheckout();
         //******** Stripe
+
+        rdiCard.setOnClickListener(view -> {
+            if (rdiCard.isChecked()) {
+                cardInputWidget2.setVisibility(View.VISIBLE);
+            } else {
+                cardInputWidget2.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        rdiCash.setOnClickListener(view -> {
+            if (rdiCash.isChecked()) {
+                cardInputWidget2.setVisibility(View.INVISIBLE);
+            } else {
+                cardInputWidget2.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
     private void getOrderNumer(boolean isOnlinePayment) {
-        if (isOnlinePayment == false) {
+        if (!isOnlinePayment) {
             status = "WAITING";
             checkout = "N";
             cash = false;
@@ -144,64 +165,63 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
             cash = true;
         }
         orderId = UUID.randomUUID().toString();
-        if (!isOnlinePayment) {
-            String address = "";
-            compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(cartItems -> {
-                        compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, cash, Common.totalCash, status, checkout, address)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(createOrderModel -> {
-                                    if (createOrderModel.isSuccess()) {
-                                        compositeDisposable.add(iMcDonaldsAPI.createOrderDetail(Common.API_KEY, orderId, new Gson().toJson(cartItems))
-                                                .subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(updateOrderModel -> {
-                                                    if (updateOrderModel.isSuccess()) {
-                                                        cartDataSource.cleanCart(Common.currentUser.getUserPhone())
-                                                                .subscribeOn(Schedulers.io())
-                                                                .observeOn(AndroidSchedulers.mainThread())
-                                                                .subscribe(new SingleObserver<Integer>() {
-                                                                    @Override
-                                                                    public void onSubscribe(@NonNull Disposable d) {
 
-                                                                    }
+        String address = "";
+        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(cartItems -> {
+                    compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, cash, Common.totalCash, status, checkout, address)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(createOrderModel -> {
+                                if (createOrderModel.isSuccess()) {
+                                    compositeDisposable.add(iMcDonaldsAPI.createOrderDetail(Common.API_KEY, orderId, new Gson().toJson(cartItems))
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(updateOrderModel -> {
+                                                if (updateOrderModel.isSuccess()) {
+                                                    cartDataSource.cleanCart(Common.currentUser.getUserPhone())
+                                                            .subscribeOn(Schedulers.io())
+                                                            .observeOn(AndroidSchedulers.mainThread())
+                                                            .subscribe(new SingleObserver<Integer>() {
+                                                                @Override
+                                                                public void onSubscribe(@NonNull Disposable d) {
 
-                                                                    @Override
-                                                                    public void onSuccess(@NonNull Integer integer) {
-                                                                        displayAlert(
-                                                                                "Thông báo",
-                                                                                "Thanh toán thành công.");
-                                                                        clearAllItemInCart();
+                                                                }
+
+                                                                @Override
+                                                                public void onSuccess(@NonNull Integer integer) {
+//                                                                    displayAlert(
+//                                                                            "Thông báo",
+//                                                                            "Thanh toán thành công.");
+                                                                    clearAllItemInCart();
 //                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
 //                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                                                                        startActivity(homeActivity);
 
-                                                                    }
+                                                                }
 
-                                                                    @Override
-                                                                    public void onError(@NonNull Throwable e) {
-                                                                        Toast.makeText(OrderActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                });
-                                                    }
+                                                                @Override
+                                                                public void onError(@NonNull Throwable e) {
+                                                                    Toast.makeText(OrderActivity.this, "[CLEAR CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
+                                                }
 
-                                                }, throwable -> {
-                                                    Toast.makeText(this, "[UPDATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }));
-                                    } else {
-                                        Toast.makeText(this, "[CREATE ORDER]" + createOrderModel.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }, throwable -> {
-                                    //Toast.makeText(this, "[CREATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }));
-                    }, throwable -> {
-                        Toast.makeText(this, "[GET ALL CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }));
-        }
+                                            }, throwable -> {
+                                                Toast.makeText(this, "[UPDATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }));
+                                } else {
+                                    Toast.makeText(this, "[CREATE ORDER]" + createOrderModel.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }, throwable -> {
+                                //Toast.makeText(this, "[CREATE ORDER]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                finish();
+                            }));
+                }, throwable -> {
+                    Toast.makeText(this, "[GET ALL CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                }));
     }
 
     private void clearAllItemInCart() {
@@ -227,11 +247,7 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
         Map<String, Object> itemMap = new HashMap<>();
         List<Map<String, Object>> itemList = new ArrayList<>();
         payMap.put("currency", Common.currency);
-        payMap.put("customer", Common.currentUser.getName());
-        itemMap.put("id", Common.Imei);
-        itemMap.put("amount", amount);
-        itemList.add(itemMap);
-        payMap.put("items", itemList);
+        payMap.put("amount", amount);
         String json = new Gson().toJson(payMap);
 
         RequestBody body = RequestBody.create(json, mediaType);
@@ -243,15 +259,16 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
                 .enqueue(new OrderActivity.PayCallback(this));
 
         // Hook up the pay button to the card widget and stripe instance
-        Button payButton = findViewById(R.id.payButton);
+        Button payButton = findViewById(R.id.payButton2);
 
         payButton.setOnClickListener((View view) -> {
 
             if (rdiCash.isChecked()) {
                 getOrderNumer(false);
 //                Toast.makeText(this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-                Snackbar.make(view, "Đặt hàng thành công.!", Snackbar.LENGTH_LONG)
-                        .setAction("Thông báo", null).show();
+                displayAlert(
+                        "Thông báo",
+                        "Thanh toán thành công.");
             } else {
                 try {
                     getOrderNumer(true);
@@ -261,7 +278,6 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
                         ConfirmPaymentIntentParams confirmParams = ConfirmPaymentIntentParams
                                 .createWithPaymentMethodCreateParams(params, paymentIntentClientSecret);
                         stripe.confirmPayment(this, confirmParams);
-                        cleanCard();
                         displayAlert(
                                 "Thông báo",
                                 "Thanh toán thành công.");
@@ -271,8 +287,9 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
                     displayAlert(
                             "Thông báo",
                             "Thanh toán thành công.");
-                    cleanCard();
-                    finish();
+                    //cleanCard();
+                    //finish();
+                    //finish();
                 }
             }
         });
@@ -291,9 +308,9 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
 
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
-                        displayAlert(
-                                "Thông báo",
-                                "Thanh toán thành công.");
+//                        displayAlert(
+//                                "Thông báo",
+//                                "Thanh toán thành công.");
                     }
 
                     @Override
@@ -347,11 +364,11 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
                 return;
             }
 
-            activity.runOnUiThread(() ->
-                    Toast.makeText(
-                            activity, "Error: " + e.toString(), Toast.LENGTH_LONG
-                    ).show()
-            );
+//            activity.runOnUiThread(() ->
+//                    Toast.makeText(
+//                            activity, "Error: " + e.toString(), Toast.LENGTH_LONG
+//                    ).show()
+//            );
         }
 
         @Override
@@ -428,7 +445,8 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
 
         tvTable.setEnabled(false);
         tvTotal.setEnabled(false);
-
+        cardInputWidget2.setVisibility(View.INVISIBLE);
+        rdiCash.isChecked();
         toolbar.setTitle(getString(R.string.place_order));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -443,15 +461,15 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
             dpd.show(getSupportFragmentManager(), "Datepickerdialog");
         });
 
-        payButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isSelectDate) {
-                    Toast.makeText(OrderActivity.this, "Please select date", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-        });
+//        payButton2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!isSelectDate) {
+//                    Toast.makeText(OrderActivity.this, "Please select date", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//            }
+//        });
     }
 
     private void init() {
@@ -465,20 +483,9 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
         tvDate.setText(new StringBuilder("")
                 .append(monthOfYear + 1)
                 .append("/")
-                .append(dayOfMonth + 1)
+                .append(dayOfMonth)
                 .append("/")
                 .append(year));
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
 }
