@@ -122,7 +122,7 @@ public class CategoryActivity extends AppCompatActivity {
         recycler_category.setLayoutManager(mLayoutManager);
 //        Toast.makeText(this, "User: " + Common.currentUser.getName(), Toast.LENGTH_SHORT).show();
         tvHoten.setText(Common.currentUser.getName());
-        tvPhone.setText(Common.currentUser.getUserPhone());
+        tvPhone.setText(Common.currentUser.getUserphone());
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 //        recycler_category.setLayoutManager(layoutManager);
 //        recycler_category.addItemDecoration(new DividerItemDecoration(this, layoutManager.getOrientation()));
