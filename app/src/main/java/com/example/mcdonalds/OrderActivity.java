@@ -224,19 +224,19 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
                 }));
     }
 
-    private void clearAllItemInCart() {
-        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserphone())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(cartItems -> {
-                    if (cartItems.isEmpty()) {
-                        recycler_cart.setAdapter(null);
-                    }
-                }, throwable -> {
-                    Toast.makeText(this, "[GET CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-
-                }));
-    }
+//    private void clearAllItemInCart() {
+//        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserphone())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(cartItems -> {
+//                    if (cartItems.isEmpty()) {
+//                        recycler_cart.setAdapter(null);
+//                    }
+//                }, throwable -> {
+//                    Toast.makeText(this, "[GET CART]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//                }));
+//    }
 
     //******** Stripe
     private void startCheckout() {

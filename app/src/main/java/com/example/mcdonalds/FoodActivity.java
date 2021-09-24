@@ -209,7 +209,6 @@ public class FoodActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         return true;
     }
 

@@ -250,7 +250,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
     private void getOrderNumer(boolean isOnlinePayment) {
         orderId = UUID.randomUUID().toString();
         if (!isOnlinePayment) {
-            compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getAddress())
+            compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserphone())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(cartItems -> {
@@ -278,7 +278,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 //                                                                        displayAlert(
 //                                                                                "Thông báo",
 //                                                                                "Thanh toán thành công.");
-                                                                        cleanCard();
+                                                                        //cleanCard();
 //                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
 //                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                                                                        startActivity(homeActivity);
@@ -492,15 +492,15 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
             dpd.show(getSupportFragmentManager(), "Datepickerdialog");
         });
 
-        payButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isSelectDate) {
-                    Toast.makeText(PlaceOrderActivity.this, "Please select date", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-        });
+//        payButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!isSelectDate) {
+//                    Toast.makeText(PlaceOrderActivity.this, "Please select date", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//            }
+//        });
     }
 
     private void getAllStore() {

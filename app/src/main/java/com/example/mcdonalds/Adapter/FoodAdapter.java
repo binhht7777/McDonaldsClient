@@ -119,7 +119,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         holder.txt_food_name.setText(foodList.get(position).getFoodname());
         holder.txt_food_price.setText(String.valueOf(foodList.get(position).getPrice()) + " " + context.getString(R.string.currency));
 
-        orderDetailId = UUID.randomUUID().toString();
+
         holder.setListener((view, position1, isDetail) -> {
             Common.currentFood = foodList.get(position);
             Common.globalFoodId = foodList.get(position).getFoodid();
@@ -128,6 +128,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
 //                EventBus.getDefault().postSticky(new FoodDetailEvent(true, foodList.get(position)));
                 Toast.makeText(context, "YOU CLICK INFOMATION", Toast.LENGTH_SHORT).show();
             } else {
+                orderDetailId = UUID.randomUUID().toString();
                 // cart create
                 CartItem cartItem = new CartItem();
                 cartItem.setOrderDetailId(orderDetailId);
