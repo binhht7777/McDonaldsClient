@@ -81,8 +81,9 @@ public interface IMcDonaldsAPI {
     @POST("users")
     @FormUrlEncoded
     Observable<UpdateUserModel> updateUserInfo(@Field("key") String apiKey,
-                                               @Field("imei") String orderId,
-                                               @Field("userPhone") String orderDetail,
+                                               @Field("imei") String imei,
+                                               @Field("userPhone") String userPhone,
+                                               @Field("passWord") String passWord,
                                                @Field("name") String name,
                                                @Field("address") String address,
                                                @Field("isCustomerYN") String isCustomerYN);

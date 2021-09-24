@@ -25,7 +25,7 @@ public class CreateUserActivity extends AppCompatActivity {
     IMcDonaldsAPI iMcDonaldsAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    TextInputEditText edtPhone, edtName, edtAddress;
+    TextInputEditText edtPhone, edtName, edtAddress, edtPassword;
     Button btnUpdate;
     String Imei = "";
 
@@ -44,6 +44,7 @@ public class CreateUserActivity extends AppCompatActivity {
         edtName = (TextInputEditText) findViewById(R.id.edtName);
         edtAddress = (TextInputEditText) findViewById(R.id.edtAddress);
         btnUpdate = (Button) findViewById(R.id.btnUpdate);
+        edtPassword = (TextInputEditText)findViewById(R.id.edtPassword);
 
         ButterKnife.bind(this);
         init();
@@ -58,6 +59,7 @@ public class CreateUserActivity extends AppCompatActivity {
                 compositeDisposable.add(iMcDonaldsAPI.updateUserInfo(Common.API_KEY,
                         Imei,
                         edtPhone.getText().toString(),
+                        edtPassword.getText().toString(),
                         edtName.getText().toString(),
                         edtAddress.getText().toString(),
                         "Y")
