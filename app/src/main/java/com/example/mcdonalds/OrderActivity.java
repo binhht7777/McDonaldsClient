@@ -167,11 +167,11 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
         orderId = UUID.randomUUID().toString();
 
         String address = "";
-        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserphone())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cartItems -> {
-                    compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, cash, Common.totalCash, status, checkout, address)
+                    compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserphone(), storeId, cash, Common.totalCash, status, checkout, address)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(createOrderModel -> {
@@ -181,7 +181,7 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
                                             .observeOn(AndroidSchedulers.mainThread())
                                             .subscribe(updateOrderModel -> {
                                                 if (updateOrderModel.isSuccess()) {
-                                                    cartDataSource.cleanCart(Common.currentUser.getUserPhone())
+                                                    cartDataSource.cleanCart(Common.currentUser.getUserphone())
                                                             .subscribeOn(Schedulers.io())
                                                             .observeOn(AndroidSchedulers.mainThread())
                                                             .subscribe(new SingleObserver<Integer>() {
@@ -225,7 +225,7 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
     }
 
     private void clearAllItemInCart() {
-        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserphone())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cartItems -> {
@@ -297,7 +297,7 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
     //******** Stripe
 
     private void cleanCard() {
-        cartDataSource.cleanCart(Common.currentUser.getUserPhone())
+        cartDataSource.cleanCart(Common.currentUser.getUserphone())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Integer>() {
