@@ -168,6 +168,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
         cmb_cuahang = (AutoCompleteTextView) findViewById(R.id.cmb_cuahang);
         recycler_store = (RecyclerView) findViewById(R.id.recycler_store);
 
+
         init();
         initView();
 
@@ -249,11 +250,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
     private void getOrderNumer(boolean isOnlinePayment) {
         orderId = UUID.randomUUID().toString();
         if (!isOnlinePayment) {
-            compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+            compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getAddress())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(cartItems -> {
-                        compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserPhone(), storeId, false, Common.totalCash, "WAITING", "Y", txt_user_address.getText().toString())
+                        compositeDisposable.add(iMcDonaldsAPI.createOrder(Common.API_KEY, orderId, Common.Imei, Common.currentUser.getUserphone(), storeId, false, Common.totalCash, "WAITING", "Y", txt_user_address.getText().toString())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(createOrderModel -> {
@@ -263,7 +264,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe(updateOrderModel -> {
                                                     if (updateOrderModel.isSuccess()) {
-                                                        cartDataSource.cleanCart(Common.currentUser.getUserPhone())
+                                                        cartDataSource.cleanCart(Common.currentUser.getUserphone())
                                                                 .subscribeOn(Schedulers.io())
                                                                 .observeOn(AndroidSchedulers.mainThread())
                                                                 .subscribe(new SingleObserver<Integer>() {
@@ -308,7 +309,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
     }
 
     private void cleanCard() {
-        cartDataSource.cleanCart(Common.currentUser.getUserPhone())
+        cartDataSource.cleanCart(Common.currentUser.getUserphone())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Integer>() {
@@ -451,10 +452,10 @@ public class PlaceOrderActivity extends AppCompatActivity implements DatePickerD
 
     private void initView() {
         ButterKnife.bind(this);
-        txt_user_phone.setText(Common.currentUser.getUserPhone());
+        txt_user_phone.setText(Common.currentUser.getUserphone());
         text_name.setText(Common.currentUser.getName());
         txt_total_cash.setText(Common.totalCash.toString());
-
+        txt_user_address.setText(Common.currentUser.getAddress());
         txt_total_cash.setEnabled(false);
         text_name.setEnabled(false);
         txt_user_phone.setEnabled(false);

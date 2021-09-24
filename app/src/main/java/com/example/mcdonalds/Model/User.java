@@ -1,13 +1,14 @@
 package com.example.mcdonalds.Model;
 
 public class User {
-    private String imei, userphone, name, iscustomeryn;
+    private String imei, userphone, name, address, iscustomeryn;
 
-    public User(String imei, String userPhone, String name, String isCustomerYN) {
-        imei = imei;
-        userphone = userPhone;
-        name = name;
-        iscustomeryn = isCustomerYN;
+    public User(String imei, String userphone, String name, String address, String iscustomeryn) {
+        this.imei = imei;
+        this.userphone = userphone;
+        this.name = name;
+        this.address = address;
+        this.iscustomeryn = iscustomeryn;
     }
 
     public String getImei() {
@@ -15,15 +16,15 @@ public class User {
     }
 
     public void setImei(String imei) {
-        imei = imei;
+        this.imei = imei;
     }
 
-    public String getUserPhone() {
+    public String getUserphone() {
         return userphone;
     }
 
-    public void setUserPhone(String userPhone) {
-        userphone = userPhone;
+    public void setUserphone(String userphone) {
+        this.userphone = userphone;
     }
 
     public String getName() {
@@ -31,14 +32,22 @@ public class User {
     }
 
     public void setName(String name) {
-        name = name;
+        this.name = name;
     }
 
-    public String getIsCustomerYN() {
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getIscustomeryn() {
         return iscustomeryn;
     }
 
-    public void setIsCustomerYN(String isCustomerYN) {
-        iscustomeryn = isCustomerYN;
+    public void setIscustomeryn(String iscustomeryn) {
+        this.iscustomeryn = iscustomeryn;
     }
 }

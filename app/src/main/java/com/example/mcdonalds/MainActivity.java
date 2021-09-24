@@ -148,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(userModel -> {
                             if (userModel.isSuccess()) {
                                 Common.currentUser = userModel.getResult().get(0);
-                                if (userModel.getResult().get(0).getIsCustomerYN().compareTo("N") == 0) {
-                                    Common.isCustomerYN = userModel.getResult().get(0).getIsCustomerYN();
+                                if (userModel.getResult().get(0).getIscustomeryn().compareTo("N") == 0) {
+                                    Common.isCustomerYN = userModel.getResult().get(0).getIscustomeryn();
                                     edtPhone.setVisibility(View.INVISIBLE);
                                     edtPassword.setVisibility(View.INVISIBLE);
 //                                    chkDangky.setVisibility(View.INVISIBLE);
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }, 3000);
                                 } else {
-                                    Common.isCustomerYN = userModel.getResult().get(0).getIsCustomerYN();
+                                    Common.isCustomerYN = userModel.getResult().get(0).getIscustomeryn();
                                     edtPhone.setVisibility(View.VISIBLE);
                                     edtPassword.setVisibility(View.VISIBLE);
 //                                    chkDangky.setVisibility(View.VISIBLE);

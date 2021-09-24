@@ -131,7 +131,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                 // cart create
                 CartItem cartItem = new CartItem();
                 cartItem.setOrderDetailId(orderDetailId);
-                cartItem.setUserPhone(Common.currentUser.getUserPhone());
+                cartItem.setUserPhone(Common.currentUser.getUserphone());
                 cartItem.setFoodId(foodList.get(position).getFoodid());
                 cartItem.setFoodName(foodList.get(position).getFoodname());
                 cartItem.setFoodPrice(foodList.get(position).getPrice());
