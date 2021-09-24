@@ -156,7 +156,7 @@ public class DonHangActivity extends AppCompatActivity {
     }
 
     private void getAllItemInCart() {
-        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserphone())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cartItems -> {
@@ -185,7 +185,7 @@ public class DonHangActivity extends AppCompatActivity {
     }
 
     private void clearAllItemInCart() {
-        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserPhone())
+        compositeDisposable.add(cartDataSource.getAllCart2(Common.currentUser.getUserphone())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cartItems -> {
@@ -199,7 +199,7 @@ public class DonHangActivity extends AppCompatActivity {
     }
 
     private void calculateCartTotalPrice() {
-        cartDataSource.sumPrice2(Common.currentUser.getUserPhone())
+        cartDataSource.sumPrice2(Common.currentUser.getUserphone())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Long>() {
