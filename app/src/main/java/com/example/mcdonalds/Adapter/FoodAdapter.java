@@ -2,6 +2,7 @@ package com.example.mcdonalds.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,12 +47,14 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
     Context context;
     List<Food> foodList;
     List<Food> foodListOld;
+
     private SelectedFood selectedFood;
 
     CompositeDisposable completDisposable;
     IMcDonaldsAPI mcDonaldsAPI;
     CartDataSource cartDataSource;
     String orderDetailId;
+    String eventAdd, eventDel;
 
     public void onStop() {
         completDisposable.clear();
@@ -66,6 +69,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         completDisposable = new CompositeDisposable();
         cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(context).cartDAO());
         mcDonaldsAPI = RetrofitClient.getInstance(Common.API_RESTAURANT_ENDPOINT).create(IMcDonaldsAPI.class);
+        if (Common.currentFavoriteFood == null) {
+            Common.currentFavoriteFood = new ArrayList<>();
+        }
     }
 
 
@@ -106,6 +112,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
         Picasso.get().load(foodList.get(position).getFoodimg())
                 .placeholder(null)
                 .into(holder.img_food);
@@ -147,9 +154,15 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
             }
         });
 
+        if (Common.getFavoriteAll != null && Common.getFavoriteAll.size() > 0) {
+            if (Common.checkFavoriteSum(foodList.get(position).getFoodid(), "NOR")) {
+                holder.txtLike.setText(Common.sumFood);
+            }
+        }
+
         // check favorite
-        if (Common.currentFavoriteRestaurant != null && Common.currentFavoriteRestaurant.size() > 0) {
-            if (Common.checkFavorite(foodList.get(position).getFoodid())) {
+        if (Common.currentFavoriteFood != null && Common.currentFavoriteFood.size() > 0) {
+            if (Common.checkFavorite1(foodList.get(position).getFoodid())) {
                 holder.img_fav.setImageResource(R.drawable.ic_baseline_favorite_24);
                 holder.img_fav.setTag(true);
             } else {
@@ -159,6 +172,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
         } else {
             holder.img_fav.setTag(false);
         }
+
         //holder.img_fav.setTag(false);
         holder.img_fav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,8 +187,16 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                                         if (favoriteModel.isSuccess() && favoriteModel.getMessage().contains("Success")) {
                                             fav.setImageResource(R.drawable.ic_baseline_favorite_border_24);
                                             fav.setTag(false);
-                                            if (Common.currentFavoriteRestaurant != null) {
-                                                Common.removeFavorite(foodList.get(position).getFoodid());
+//                                            if (Common.currentFavoriteFoodALL != null) {
+//                                                Common.removeFavorite(foodList.get(position).getFoodid());
+//                                            }
+                                            if (Common.currentFavoriteFood != null) {
+                                                Common.removeFavorite1((foodList.get(position).getFoodid()));
+                                            }
+                                            if (Common.checkFavoriteSum(foodList.get(position).getFoodid(), "DEL")) {
+                                                holder.txtLike.setText(Common.sumFood);
+                                            }else{
+                                                holder.txtLike.setText("1");
                                             }
                                         }
                                     },
@@ -192,8 +214,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
                                         if (favoriteModel.isSuccess() && favoriteModel.getMessage().contains("Success")) {
                                             fav.setImageResource(R.drawable.ic_baseline_favorite_24);
                                             fav.setTag(true);
-                                            if (Common.currentFavoriteRestaurant != null) {
-                                                Common.currentFavoriteRestaurant.add(new FavoriteOnlyId(foodList.get(position).getFoodid()));
+                                            Common.currentFavoriteFood.add(new FavoriteOnlyId(foodList.get(position).getFoodid()));
+                                            if (Common.getFavoriteAll != null && Common.getFavoriteAll.size() > 0) {
+                                                if (Common.checkFavoriteSum(foodList.get(position).getFoodid(), "ADD")) {
+                                                    holder.txtLike.setText(Common.sumFood);
+                                                }
                                             }
                                         }
                                     },
@@ -215,6 +240,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
 
     }
 
+
+
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.img_food)
         ImageView img_food;
@@ -233,6 +260,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.MyViewHolder> 
 
         @BindView(R.id.img_fav)
         ImageView img_fav;
+
+        @BindView(R.id.txtLike)
+        TextView txtLike;
 
         IFoodDetailOrCartClickListener listener;
 

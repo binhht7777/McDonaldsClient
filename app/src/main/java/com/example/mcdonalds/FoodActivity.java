@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mcdonalds.Adapter.FoodAdapter;
 import com.example.mcdonalds.Common.Common;
+import com.example.mcdonalds.EventBus.CategoryLoadEvent;
+import com.example.mcdonalds.EventBus.FavoriteLoadEvent;
 import com.example.mcdonalds.EventBus.FoodListEvent;
 import com.example.mcdonalds.Model.Food;
 import com.example.mcdonalds.Retrofit.IMcDonaldsAPI;
@@ -26,6 +28,8 @@ import com.example.mcdonalds.Retrofit.RetrofitClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +49,6 @@ public class FoodActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
 
     FoodAdapter adapter;
 
@@ -72,6 +75,7 @@ public class FoodActivity extends AppCompatActivity {
         init();
         initView();
 
+
     }
 
     private void initView() {
@@ -84,8 +88,7 @@ public class FoodActivity extends AppCompatActivity {
         rcvFoodList = findViewById(R.id.recycler_food);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rcvFoodList.setLayoutManager(linearLayoutManager);
-
-
+        LoadFavorite();
     }
 
     private void init() {
@@ -112,6 +115,44 @@ public class FoodActivity extends AppCompatActivity {
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFavoriteFood();
+    }
+
+    private void LoadFavorite() {
+        compositeDisposable.add(iMcDonaldsAPI.getFavorite2(Common.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(favoriteModel -> {
+                            Common.getFavoriteAll = favoriteModel.getResult();
+                        },
+                        throwable -> {
+                            Toast.makeText(this, "[GET FAVORITE]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        }));
+    }
+
+    private void loadFavoriteFood() {
+        compositeDisposable.add(iMcDonaldsAPI.getAllFavorite2(Common.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(favoriteOnlyIdModel -> {
+                            if (favoriteOnlyIdModel.isSuccess()) {
+                                if (favoriteOnlyIdModel.getResult() != null && favoriteOnlyIdModel.getResult().size() > 0) {
+                                    Common.currentFavoriteFoodALL = favoriteOnlyIdModel.getResult();
+                                } else {
+                                    Common.currentFavoriteFoodALL = new ArrayList<>();
+                                }
+                            } else {
+//                                Toast.makeText(this, "[GET FAVORITE]" + favoriteOnlyIdModel.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        , throwable -> {
+                            Toast.makeText(this, "[GET FAVORITE]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        }));
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

@@ -155,13 +155,13 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
     }
 
     private void getOrderNumer(boolean isOnlinePayment) {
-        if (!isOnlinePayment) {
+        if (isOnlinePayment == true) {
             status = "WAITING";
             checkout = "N";
             cash = false;
         } else {
-            status = "WAITING";
-            checkout = "Y";
+            status = "TODO";
+            checkout = "N";
             cash = true;
         }
         orderId = UUID.randomUUID().toString();
@@ -195,7 +195,7 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
 //                                                                    displayAlert(
 //                                                                            "Thông báo",
 //                                                                            "Thanh toán thành công.");
-                                                                    clearAllItemInCart();
+//                                                                    clearAllItemInCart();
 //                                                                        Intent homeActivity = new Intent(DonHangActivity.this, HomeActivity.class);
 //                                                                        homeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                                                                        startActivity(homeActivity);

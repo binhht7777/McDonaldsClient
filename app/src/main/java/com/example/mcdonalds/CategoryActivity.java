@@ -60,28 +60,9 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFavoriteByRestaurant();
     }
 
-    private void loadFavoriteByRestaurant() {
-        compositeDisposable.add(iMcDonaldsAPI.getAllFavorite2(Common.API_KEY)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(favoriteOnlyIdModel -> {
-                            if (favoriteOnlyIdModel.isSuccess()) {
-                                if (favoriteOnlyIdModel.getResult() != null && favoriteOnlyIdModel.getResult().size() > 0) {
-                                    Common.currentFavoriteRestaurant = favoriteOnlyIdModel.getResult();
-                                } else {
-                                    Common.currentFavoriteRestaurant = new ArrayList<>();
-                                }
-                            } else {
-//                                Toast.makeText(this, "[GET FAVORITE]" + favoriteOnlyIdModel.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        , throwable -> {
-                            Toast.makeText(this, "[GET FAVORITE]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                        }));
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

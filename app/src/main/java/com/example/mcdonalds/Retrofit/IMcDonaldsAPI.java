@@ -91,6 +91,10 @@ public interface IMcDonaldsAPI {
     @GET("favorite")
     Observable<FavoriteModel> getFavorite(@Query("key") String apiKey);
 
+    // Get Category
+    @GET("allfavorite")
+    Observable<FavoriteModel> getFavorite2(@Query("key") String apiKey);
+
     @GET("allfavorite")
     Observable<FavoriteOnlyIdModel> getAllFavorite2(@Query("key") String apiKey);
 
@@ -106,7 +110,8 @@ public interface IMcDonaldsAPI {
                                              @Field("count") int count);
 
 
-    @POST("favorite")
+    @POST("delfavorite")
+    @FormUrlEncoded
     Observable<FavoriteModel> removeFavorite(@Field("key") String apiKey,
                                              @Field("foodId") String foodId,
                                              @Field("count") int count);
